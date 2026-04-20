@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
+
+  <node name="color_detector" pkg="tcc_follower" type="color_detector.py" output="screen">
+    <rosparam file="$(find tcc_follower)/config/params.yaml" command="load" ns="color_detector"/>
+  </node>
+</launch>

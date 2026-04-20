@@ -1,0 +1,6 @@
+<launch>
+  <!-- Assume que o LiDAR já está rodando pelo stack do Limo -->
+  <node name="lidar_reader" pkg="tcc_follower" type="lidar_reader.py" output="screen">
+    <rosparam file="$(find tcc_follower)/config/params.yaml" command="load" ns="lidar_reader"/>
+  </node>
+</launch>
