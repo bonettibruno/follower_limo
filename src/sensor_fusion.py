@@ -87,24 +87,19 @@ class SensorFusion:
     def fusion_callback(self, event):
         out = Float32MultiArray()
 
-        # Checa timeout — se faz muito tempo sem detecção visual, para o robô
-        if self.last_detection_time is not None:
-            elapsed = (rospy.Time.now() - self.last_detection_time).to_sec()
-            if elapsed > self.timeout:
-                rospy.logwarn_throttle(2.0, "Alvo perdido ha %.1f s — robô parado.", elapsed)
-                out.data = [0.0, 0.0, 0.0, 0.0, 0.0]
-                self.pub_pose.publish(out)
-                return
-
         if self.current_detection is None:
             out.data = [0.0, 0.0, 0.0, 0.0, 0.0]
             self.pub_pose.publish(out)
             return
 
         cam_found  = self.current_detection[0]
-        angle_cam  = self.current_detection[4]   # ângulo calculado pela câmera
+        angle_cam  = self.current_detection[4]
 
         if cam_found < 0.5:
+            if self.last_detection_time is not None:
+                elapsed = (rospy.Time.now() - self.last_detection_time).to_sec()
+                if elapsed > self.timeout:
+                    rospy.logwarn_throttle(2.0, "Alvo perdido ha %.1f s — robô parado.", elapsed)
             out.data = [0.0, 0.0, 0.0, 0.0, 0.0]
             self.pub_pose.publish(out)
             return
