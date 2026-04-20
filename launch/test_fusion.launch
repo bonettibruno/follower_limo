@@ -1,4 +1,5 @@
 <launch>
+  <include file="$(find limo_bringup)/launch/limo_start.launch"/>
   <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
 
   <node name="color_detector" pkg="follower_limo" type="color_detector.py" output="screen">
