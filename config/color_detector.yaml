@@ -1,0 +1,6 @@
+hsv_lower:  [26, 87, 22]
+hsv_upper:  [45, 210, 56]
+hsv_lower2: [0, 0, 0]
+hsv_upper2: [0, 0, 0]
+min_contour_area: 500
+camera_hfov: 60.0

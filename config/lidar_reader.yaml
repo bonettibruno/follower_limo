@@ -1,0 +1,3 @@
+valid_angle_range_deg: 60.0
+min_valid_dist: 0.15
+max_valid_dist: 5.0
