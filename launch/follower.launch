@@ -1,26 +1,21 @@
 <launch>
-
-  <!-- ── Câmera Astra ──────────────────────────────────────── -->
   <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
 
-  <!-- ── Nó 1: Detector de cor ──────────────────────────────── -->
   <node name="color_detector" pkg="follower_limo" type="color_detector.py" output="screen">
-    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="color_detector"/>
+    <rosparam file="$(find follower_limo)/config/color_detector.yaml" command="load"/>
   </node>
 
-  <!-- ── Nó 2: Leitor do LiDAR ──────────────────────────────── -->
   <node name="lidar_reader" pkg="follower_limo" type="lidar_reader.py" output="screen">
-    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="lidar_reader"/>
+    <rosparam file="$(find follower_limo)/config/lidar_reader.yaml" command="load"/>
   </node>
 
-  <!-- ── Nó 3: Fusão de sensores ────────────────────────────── -->
   <node name="sensor_fusion" pkg="follower_limo" type="sensor_fusion.py" output="screen">
-    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="sensor_fusion"/>
+    <rosparam file="$(find follower_limo)/config/sensor_fusion.yaml" command="load"/>
   </node>
 
-  <!-- ── Nó 4: Controlador ───────────────────────────────────── -->
   <node name="follower_controller" pkg="follower_limo" type="follower_controller.py" output="screen">
-    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="follower_controller"/>
+    <rosparam file="$(find follower_limo)/config/follower_controller.yaml" command="load"/>
   </node>
 
+  <include file="$(find foxglove_bridge)/launch/foxglove_bridge.launch"/>
 </launch>
