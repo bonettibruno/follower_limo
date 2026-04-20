@@ -5,8 +5,8 @@
 
 color_detector:
   # Cor alvo em HSV — use tools/hsv_calibrator.py para encontrar seus valores
-  hsv_lower:  [0,   120, 70]
-  hsv_upper:  [15,  255, 255]
+  hsv_lower:  [26,   87, 22]
+  hsv_upper:  [45,  210, 56]
   hsv_lower2: [170, 120, 70]   # segunda faixa para laranja (wrap do hue)
   hsv_upper2: [180, 255, 255]
   min_contour_area: 500         # área mínima em px² para considerar detecção
