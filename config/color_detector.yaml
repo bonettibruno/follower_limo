@@ -1,6 +1,6 @@
-hsv_lower:  [26, 87, 22]
-hsv_upper:  [45, 210, 56]
-hsv_lower2: [0, 0, 0]
-hsv_upper2: [0, 0, 0]
-min_contour_area: 500
-camera_hfov: 60.0
+hsv_lower:  [26, 87, 22]     # lower HSV bound for target color — recalibrate if lighting changes
+hsv_upper:  [45, 210, 56]    # upper HSV bound for target color
+hsv_lower2: [0, 0, 0]        # second HSV range (used for colors that wrap around H=180, e.g. orange)
+hsv_upper2: [0, 0, 0]        # set both lower2/upper2 to [0,0,0] to disable second range
+min_contour_area: 500         # minimum blob area in px² to consider a valid detection — filters noise
+camera_hfov: 60.0             # horizontal field of view of the Astra camera in degrees

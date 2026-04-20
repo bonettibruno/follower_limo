@@ -1,8 +1,10 @@
-kp_angular: 0.6
-kp_linear: 0.4
-max_linear_vel: 0.3
-max_angular_vel: 0.8
-deadzone_angle: 0.05
-deadzone_dist: 0.10
-safety_timeout: 0.5
-cmd_vel_topic: "/cmd_vel"
+kp_angular: 0.6              # proportional gain for rotation (increase if robot is slow to align)
+kp_linear: 0.4               # proportional gain for forward/backward (increase if robot is slow to adjust distance)
+max_linear_vel: 0.3          # maximum linear velocity in m/s (Limo safety limit)
+max_angular_vel: 0.8         # maximum angular velocity in rad/s (Limo safety limit)
+deadzone_angle: 0.05         # minimum angular error to act on (normalized [-1,1]) — avoids jitter
+deadzone_dist: 0.10          # minimum distance error to act on (meters) — avoids jitter
+safety_timeout: 0.5          # seconds without /target/pose before emergency stop
+cmd_vel_topic: "/cmd_vel"    # velocity command topic — confirm with rostopic list on Limo
+recovery_angular_vel: 0.3    # rotation speed during target search (rad/s) — keep slow
+recovery_timeout: 4.0        # seconds to search before giving up and stopping

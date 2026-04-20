@@ -1,4 +1,4 @@
-target_distance: 1.0
-target_timeout: 1.0
-alpha_angle: 0.4
-alpha_dist: 0.6
+target_distance: 1.0         # desired distance to maintain from the target in meters
+target_timeout: 1.0          # seconds without visual detection before stopping the robot
+alpha_angle: 0.4             # exponential smoothing factor for angle (0=very smooth/slow, 1=no filter)
+alpha_dist: 0.6              # exponential smoothing factor for distance (0=very smooth/slow, 1=no filter)
