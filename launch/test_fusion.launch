@@ -1,15 +1,15 @@
 <launch>
   <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
 
-  <node name="color_detector" pkg="tcc_follower" type="color_detector.py" output="screen">
-    <rosparam file="$(find tcc_follower)/config/params.yaml" command="load" ns="color_detector"/>
+  <node name="color_detector" pkg="follower_limo" type="color_detector.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="color_detector"/>
   </node>
 
-  <node name="lidar_reader" pkg="tcc_follower" type="lidar_reader.py" output="screen">
-    <rosparam file="$(find tcc_follower)/config/params.yaml" command="load" ns="lidar_reader"/>
+  <node name="lidar_reader" pkg="follower_limo" type="lidar_reader.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="lidar_reader"/>
   </node>
 
-  <node name="sensor_fusion" pkg="tcc_follower" type="sensor_fusion.py" output="screen">
-    <rosparam file="$(find tcc_follower)/config/params.yaml" command="load" ns="sensor_fusion"/>
+  <node name="sensor_fusion" pkg="follower_limo" type="sensor_fusion.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/params.yaml" command="load" ns="sensor_fusion"/>
   </node>
 </launch>
