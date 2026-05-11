@@ -1,0 +1,4 @@
+model_path:           "yolov8n.pt"   # baixado automaticamente na primeira execucao
+target_class:         "sports ball"  # classe YOLO alvo (nomes do COCO dataset)
+confidence_threshold: 0.5
+camera_hfov:          60.0           # campo de visao horizontal da Astra em graus

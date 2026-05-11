@@ -1,0 +1,6 @@
+# Modelos recomendados:
+#   Jetson Xavier NX (8 GB): "microsoft/Phi-3-mini-4k-instruct"  (~2.3 GB)
+#   Jetson Nano (4 GB):      "Qwen/Qwen2.5-0.5B-Instruct"        (~1 GB)
+model_name:     "Qwen/Qwen2.5-0.5B-Instruct"
+max_new_tokens: 256
+device:         "auto"   # "auto" usa CUDA se disponivel, senao CPU

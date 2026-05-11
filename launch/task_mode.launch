@@ -1,0 +1,31 @@
+<launch>
+  <!-- Hardware do Limo e câmera Astra -->
+  <include file="$(find limo_bringup)/launch/limo_start.launch"/>
+  <include file="$(find astra_camera)/launch/dabai_u3.launch"/>
+
+  <!-- Detector de objetos via YOLO (substitui color_detector neste modo) -->
+  <node name="yolo_detector" pkg="follower_limo" type="yolo_detector.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/yolo_detector.yaml" command="load"/>
+  </node>
+
+  <!--
+    LiDAR reader com remap: recebe ângulo de detecção do YOLO em vez do color_detector.
+    Isso permite reutilizar lidar_reader.py sem modificá-lo.
+  -->
+  <node name="lidar_reader" pkg="follower_limo" type="lidar_reader.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/lidar_reader.yaml" command="load"/>
+    <remap from="/target/detection" to="/yolo/detection"/>
+  </node>
+
+  <!-- Executor de tarefas: recebe JSON de ações e controla o robô -->
+  <node name="task_executor" pkg="follower_limo" type="task_executor.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/task_executor.yaml" command="load"/>
+  </node>
+
+  <!-- Comandante LLM: traduz linguagem natural em ações -->
+  <node name="llm_commander" pkg="follower_limo" type="llm_commander.py" output="screen">
+    <rosparam file="$(find follower_limo)/config/llm_commander.yaml" command="load"/>
+  </node>
+
+  <include file="$(find foxglove_bridge)/launch/foxglove_bridge.launch"/>
+</launch>
