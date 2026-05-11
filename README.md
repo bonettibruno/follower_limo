@@ -13,9 +13,10 @@ src/
   sensor_fusion.py      combina câmera e LiDAR em uma estimativa de pose do alvo
   follower_controller.py  controle proporcional que gera comandos /cmd_vel
   yolo_detector.py      detecção de objetos por categoria usando YOLOv8
-  robot_primitives.py   biblioteca de ações primitivas (andar, girar, buscar, etc.)
-  task_executor.py      executa sequências de ações recebidas em JSON
-  llm_commander.py      traduz linguagem natural em ações usando uma LLM local
+  robot_primitives.py   biblioteca de ações primitivas com freio de segurança e campos potenciais
+  task_executor.py      executa sequências de ações em JSON; assina /odom, /scan, /yolo/*
+  task_logger.py        grava dados dos sensores em CSV durante cada tarefa
+  llm_commander.py      traduz linguagem natural em ações usando uma LLM local (HuggingFace)
 
 config/
   color_detector.yaml   faixas HSV e área mínima de contorno
@@ -35,6 +36,11 @@ launch/
 
 tools/
   hsv_calibrator.py     ferramenta gráfica para calibrar faixas HSV
+  plot_task.py          gera gráficos PNG a partir de um CSV do task_logger
+
+logs/
+  task_*.csv            gerados automaticamente pelo task_logger (não commitados)
+  task_*.png            gerados pelo plot_task.py (não commitados)
 ```
 
 ---
@@ -213,6 +219,50 @@ O `task_executor` assina `/scan` (LiDAR bruto) e calcula continuamente a distân
 - Força repulsiva: `KR * (1/d - 1/d0)` quando `d < d0` — empurra o robô para longe de obstáculos próximos
 
 Quando um obstáculo aparece entre o robô e o alvo, a repulsão reduz ou reverte a velocidade de avanço, evitando colisão. Os parâmetros `KR` (ganho repulsivo) e `REPULSIVE_INFLUENCE_DIST` (distância de influência, padrão 0.5 m) ficam no topo de `robot_primitives.py`.
+
+### Odometria
+
+O `task_executor` assina `/odom` automaticamente. Quando o Limo publica odometria, `go_forward` e `rotate` passam a usar distância e ângulo reais medidos pelos encoders das rodas, em vez de estimativa por tempo. Se `/odom` não estiver disponível (tópico silencioso), as funções caem automaticamente para o modo por tempo — nenhuma configuração manual é necessária.
+
+### Logging e geração de gráficos
+
+O `task_logger` grava automaticamente os dados de cada tarefa em um arquivo CSV enquanto o executor está rodando.
+
+**Iniciar o logger junto com o task mode:**
+
+```bash
+roslaunch follower_limo task_mode.launch
+# Em outro terminal:
+rosrun follower_limo task_logger.py
+```
+
+Os CSVs são salvos em `logs/task_YYYYMMDD_HHMMSS.csv`. Um novo arquivo é criado a cada tarefa. Os arquivos de log não são commitados no git.
+
+**Gerar os gráficos:**
+
+```bash
+python tools/plot_task.py logs/task_20240101_120000.csv
+```
+
+Gera um PNG no mesmo diretório com 6 painéis:
+
+- Distância ao alvo ao longo do tempo (com linha da distância configurada)
+- Distância mínima frontal do LiDAR (com linhas do freio de segurança e da zona de influência repulsiva)
+- Forças atrativa e repulsiva dos campos potenciais e velocidade resultante
+- Comandos `/cmd_vel` (linear e angular) enviados ao robô
+- Ângulo do alvo detectado pelo YOLO (mostra convergência para o centro)
+- Trajetória do robô no plano XY via odometria
+
+Linhas verticais tracejadas nos gráficos marcam quando cada ação começou.
+
+**Para transferir os logs para o PC e gerar os gráficos lá:**
+
+```bash
+# No PC:
+scp agilex@IP_DO_LIMO:~/catkin_ws/src/follower_limo/logs/*.csv ./logs/
+pip install matplotlib
+python tools/plot_task.py logs/task_20240101_120000.csv
+```
 
 ### Testando sem a LLM
 

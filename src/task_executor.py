@@ -21,6 +21,7 @@ import rospy
 from std_msgs.msg import Float32MultiArray, String
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import robot_primitives as primitives
@@ -46,6 +47,7 @@ class TaskExecutor:
         rospy.Subscriber('/yolo/class',              String,            self._yolo_class_cb)
         rospy.Subscriber('/lidar/distance_at_angle', Float32MultiArray, self._lidar_cb)
         rospy.Subscriber('/scan',                    LaserScan,         self._scan_cb)
+        rospy.Subscriber('/odom',                    Odometry,          self._odom_cb)
         rospy.Subscriber('/task/actions',            String,            self._actions_cb)
 
         self._publish_status("IDLE")
@@ -66,6 +68,17 @@ class TaskExecutor:
     def _lidar_cb(self, msg):
         self.state.lidar_distance = msg.data[1]
         self.state.lidar_valid    = msg.data[2] > 0.5
+
+    def _odom_cb(self, msg):
+        pos = msg.pose.pose.position
+        q   = msg.pose.pose.orientation
+        self.state.odom_x   = pos.x
+        self.state.odom_y   = pos.y
+        # yaw a partir do quaternion sem dependência de tf
+        siny = 2.0 * (q.w * q.z + q.x * q.y)
+        cosy = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+        self.state.odom_yaw   = math.atan2(siny, cosy)
+        self.state.odom_valid = True
 
     def _scan_cb(self, msg):
         """

@@ -1,0 +1,4 @@
+logs/*.csv
+logs/*.png
+*.pyc
+__pycache__/
