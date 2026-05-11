@@ -5,24 +5,29 @@ task_executor.py
 Nó ROS que recebe uma lista de ações em JSON (/task/actions) e executa
 cada uma em sequência usando robot_primitives.
 
-Mantém o estado dos sensores atualizado via subscribers e passa ao primitives.
+Mantém o estado dos sensores atualizado via subscribers:
+  - /yolo/detection e /yolo/class     — percepção visual
+  - /lidar/distance_at_angle          — distância ao alvo detectado
+  - /scan (LaserScan bruto)           — distância mínima frontal para freio de segurança
 
-Tópicos:
-  Assina:  /yolo/detection, /yolo/class, /lidar/distance_at_angle, /task/actions
-  Publica: /cmd_vel, /task/status, /task/alert
+Tópicos publicados: /cmd_vel, /task/status, /task/alert
 """
 
 import json
+import math
 import sys
 import os
 import rospy
 from std_msgs.msg import Float32MultiArray, String
+from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-# Adiciona o diretório src ao path para importar robot_primitives
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import robot_primitives as primitives
 from robot_primitives import RobotState
+
+# Setor frontal considerado para o freio de segurança (±graus do centro)
+FRONT_SECTOR_DEG = 30.0
 
 
 class TaskExecutor:
@@ -40,6 +45,7 @@ class TaskExecutor:
         rospy.Subscriber('/yolo/detection',          Float32MultiArray, self._yolo_detection_cb)
         rospy.Subscriber('/yolo/class',              String,            self._yolo_class_cb)
         rospy.Subscriber('/lidar/distance_at_angle', Float32MultiArray, self._lidar_cb)
+        rospy.Subscriber('/scan',                    LaserScan,         self._scan_cb)
         rospy.Subscriber('/task/actions',            String,            self._actions_cb)
 
         self._publish_status("IDLE")
@@ -60,6 +66,25 @@ class TaskExecutor:
     def _lidar_cb(self, msg):
         self.state.lidar_distance = msg.data[1]
         self.state.lidar_valid    = msg.data[2] > 0.5
+
+    def _scan_cb(self, msg):
+        """
+        Calcula a distância mínima no setor frontal (±FRONT_SECTOR_DEG).
+        Usado pelo freio de segurança e pelos campos potenciais.
+        """
+        front_rad = math.radians(FRONT_SECTOR_DEG)
+        valid = []
+        for i, r in enumerate(msg.ranges):
+            angle = msg.angle_min + i * msg.angle_increment
+            if abs(angle) <= front_rad and msg.range_min < r < msg.range_max:
+                if not math.isnan(r) and not math.isinf(r):
+                    valid.append(r)
+
+        if valid:
+            self.state.lidar_min_front       = min(valid)
+            self.state.lidar_min_front_valid = True
+        else:
+            self.state.lidar_min_front_valid = False
 
     # ── Callback de ações ────────────────────────────────────────────────────
 
@@ -121,18 +146,21 @@ class TaskExecutor:
             primitives.go_forward(
                 self.pub_cmd,
                 distance_m=float(params.get("distance_m", 0.5)),
-                speed=float(params.get("speed", 0.2)))
+                speed=float(params.get("speed", 0.2)),
+                state=self.state)
 
         elif name == "rotate":
             primitives.rotate(
                 self.pub_cmd,
                 degrees=float(params.get("degrees", 90)),
-                angular_speed=float(params.get("speed", 0.5)))
+                angular_speed=float(params.get("speed", 0.5)),
+                state=self.state)
 
         elif name == "scan_area":
             primitives.scan_area(
                 self.pub_cmd,
-                angular_speed=float(params.get("speed", 0.3)))
+                angular_speed=float(params.get("speed", 0.3)),
+                state=self.state)
 
         elif name == "search_object":
             primitives.search_object(

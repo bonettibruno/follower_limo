@@ -78,14 +78,49 @@ roslaunch follower_limo follower.launch
 
 ### Calibrar a cor do alvo
 
-O `color_detector.py` usa segmentação HSV para encontrar o alvo. Para ajustar os valores, use o calibrador:
+O `color_detector.py` usa segmentação HSV para encontrar o alvo. O fluxo de calibração é: tirar uma foto no Limo, transferir para o PC e rodar o calibrador localmente (ele abre uma janela gráfica que não funciona bem via SSH sem configuração extra).
+
+**1. Tirar a foto no Limo**
+
+Conecte via SSH e capture um frame da câmera com o objeto alvo visível em condições reais de iluminação:
 
 ```bash
-# Com uma imagem de referência:
-python tools/hsv_calibrator.py --image tools/captura0047.jpg
+ssh agilex@IP_DO_LIMO
 
-# Com a câmera ao vivo:
-python tools/hsv_calibrator.py --camera 0
+# Captura um frame e salva em /tmp
+python -c "
+import rospy, cv2
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import numpy as np
+
+rospy.init_node('capture', anonymous=True)
+bridge = CvBridge()
+msg = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+frame = bridge.imgmsg_to_cv2(msg, 'bgr8')
+cv2.imwrite('/tmp/captura.jpg', frame)
+print('Salvo em /tmp/captura.jpg')
+" --wait
+```
+
+Ou, se a câmera já estiver rodando como dispositivo V4L2:
+
+```bash
+python -c "import cv2; cap=cv2.VideoCapture(0); ret,f=cap.read(); cv2.imwrite('/tmp/captura.jpg',f); cap.release(); print('ok')"
+```
+
+**2. Transferir para o PC**
+
+No terminal do seu PC (não no SSH):
+
+```bash
+scp agilex@IP_DO_LIMO:/tmp/captura.jpg ./tools/
+```
+
+**3. Rodar o calibrador no PC**
+
+```bash
+python tools/hsv_calibrator.py --image tools/captura.jpg
 ```
 
 A janela mostra sliders para H_min, H_max, S_min, S_max, V_min, V_max e uma prévia da máscara em tempo real. Quando a máscara isolar bem o objeto, pressione `p` para imprimir os valores no terminal e `q` para sair. Copie os valores para `config/color_detector.yaml`.
@@ -157,15 +192,27 @@ rostopic echo /task/status
 
 | Ação | Parâmetros | Descrição |
 |---|---|---|
-| `go_forward` | `distance_m`, `speed` | Avança a distância especificada (estimativa por tempo) |
+| `go_forward` | `distance_m`, `speed` | Avança a distância especificada (estimativa por tempo); para se o freio de segurança disparar |
 | `rotate` | `degrees`, `speed` | Gira no lugar; positivo = esquerda, negativo = direita |
 | `scan_area` | `speed` | Rotação de 360 para varrer a área |
 | `search_object` | `class_name`, `timeout` | Gira devagar até encontrar o objeto via YOLO |
-| `approach_object` | `class_name`, `target_dist`, `timeout` | P-controller para aproximar do objeto detectado |
+| `approach_object` | `class_name`, `target_dist`, `timeout` | Aproximação com campos potenciais (atração ao alvo + repulsão de obstáculos); para se o freio de segurança disparar |
 | `stop` | — | Para o robô imediatamente |
 | `alert` | `message` | Publica uma mensagem em `/task/alert` e loga no terminal |
 
 Os nomes de classe seguem o dataset COCO, que o YOLOv8 usa por padrão. Exemplos: `"sports ball"`, `"person"`, `"cup"`, `"chair"`.
+
+### Freio de segurança e campos potenciais
+
+O `task_executor` assina `/scan` (LiDAR bruto) e calcula continuamente a distância mínima no setor frontal (±30°). Dois mecanismos usam esse valor:
+
+**Freio de segurança** — ativo em `go_forward` e `approach_object`. Se a distância mínima frontal cair abaixo de 20 cm, o robô para imediatamente e a ação é interrompida. O limite pode ser ajustado pela constante `SAFETY_DIST` em `robot_primitives.py`.
+
+**Campos potenciais em `approach_object`** — a velocidade linear resulta da combinação de:
+- Força atrativa: `kp_linear * (distancia_atual - distancia_alvo)` — puxa o robô em direção ao alvo
+- Força repulsiva: `KR * (1/d - 1/d0)` quando `d < d0` — empurra o robô para longe de obstáculos próximos
+
+Quando um obstáculo aparece entre o robô e o alvo, a repulsão reduz ou reverte a velocidade de avanço, evitando colisão. Os parâmetros `KR` (ganho repulsivo) e `REPULSIVE_INFLUENCE_DIST` (distância de influência, padrão 0.5 m) ficam no topo de `robot_primitives.py`.
 
 ### Testando sem a LLM
 
@@ -192,6 +239,68 @@ model_name: "Qwen/Qwen2.5-0.5B-Instruct"
 ```
 
 Se o Jetson não tiver RAM suficiente para rodar LLM e YOLO simultaneamente, o `llm_commander.py` pode ser rodado em um laptop na mesma rede ROS. Basta mudar `ROS_MASTER_URI` no laptop para apontar para o IP do Limo; os outros nós continuam rodando no robô.
+
+---
+
+## Acesso via SSH
+
+O fluxo normal de trabalho é: PC conectado na mesma rede Wi-Fi do Limo, acesso via SSH para rodar os nós, e Foxglove para visualizar.
+
+### Conectar
+
+```bash
+ssh agilex@IP_DO_LIMO
+```
+
+Para descobrir o IP do Limo quando ele já estiver na rede:
+
+```bash
+# No terminal do próprio Limo (se tiver monitor conectado):
+hostname -I
+
+# Ou no seu PC, escaneie a rede:
+nmap -sn 192.168.1.0/24   # ajuste a faixa para a sua rede
+```
+
+### Abrir múltiplos terminais no mesmo Limo
+
+Cada comando ROS (roslaunch, rostopic, etc.) precisa de um terminal separado. Em vez de abrir várias janelas SSH, use `tmux` diretamente no Limo:
+
+```bash
+ssh agilex@IP_DO_LIMO
+tmux new -s ros          # cria sessão chamada "ros"
+
+# Dentro do tmux:
+# Ctrl+B, %   → divide a tela verticalmente
+# Ctrl+B, "   → divide horizontalmente
+# Ctrl+B, seta → navega entre painéis
+# Ctrl+B, D   → desanexa (sessão continua rodando)
+# tmux attach -t ros → reanexar depois
+```
+
+### Transferir arquivos entre PC e Limo
+
+```bash
+# Do Limo para o PC:
+scp agilex@IP_DO_LIMO:/caminho/no/limo ./destino/local/
+
+# Do PC para o Limo:
+scp ./arquivo/local agilex@IP_DO_LIMO:/caminho/no/limo/
+
+# Pasta inteira:
+scp -r ./pasta agilex@IP_DO_LIMO:/destino/
+```
+
+### ROS via SSH
+
+Se quiser rodar nós no PC que se comuniquem com o ROS do Limo (por exemplo, rodar o `llm_commander` no PC e o resto no Limo):
+
+```bash
+# No PC, antes de qualquer comando ROS:
+export ROS_MASTER_URI=http://IP_DO_LIMO:11311
+export ROS_IP=IP_DO_SEU_PC
+source /opt/ros/noetic/setup.bash   # ou melodic
+```
 
 ---
 
