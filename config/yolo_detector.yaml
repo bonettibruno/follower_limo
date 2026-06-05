@@ -1,5 +1,6 @@
-model_path:           "/home/agilex/yolov8n.onnx"  # gerado no PC e transferido para o Limo
-target_class:         "sports ball"                 # nome exato da classe COCO
+cfg_path:             "/home/agilex/yolov3-tiny.cfg"
+weights_path:         "/home/agilex/yolov3-tiny.weights"
+target_class:         "sports ball"
 confidence_threshold: 0.5
 nms_threshold:        0.45
 camera_hfov:          60.0

@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 yolo_detector.py
-Nó ROS1 que detecta objetos via YOLOv8 exportado para ONNX.
-Usa cv2.dnn para inferência — compatível com Python 3.6, sem torch/ultralytics.
+Nó ROS1 que detecta objetos via YOLOv3-tiny usando cv2.dnn (formato darknet).
+Compatível com Python 3.6 e OpenCV 4.1.1 — sem torch, sem ultralytics.
 
-Para gerar o modelo ONNX (rodar no PC com ultralytics instalado):
-  python3 -c "from ultralytics import YOLO; YOLO('yolov8n.pt').export(format='onnx')"
-  scp yolov8n.onnx agilex@IP_DO_LIMO:/home/agilex/
+Para baixar o modelo no Limo:
+  wget https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3-tiny.cfg
+  wget https://pjreddie.com/media/files/yolov3-tiny.weights
 """
 
 import rospy
@@ -17,7 +17,6 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray, String
 from cv_bridge import CvBridge
 
-# 80 classes do dataset COCO (YOLOv8 padrão)
 COCO_CLASSES = [
     "person","bicycle","car","motorcycle","airplane","bus","train","truck","boat",
     "traffic light","fire hydrant","stop sign","parking meter","bench","bird","cat",
@@ -39,20 +38,28 @@ class YoloDetector:
 
         self.bridge = CvBridge()
 
-        model_path        = rospy.get_param('~model_path',           '/home/agilex/yolov8n.onnx')
+        cfg_path          = rospy.get_param('~cfg_path',             '/home/agilex/yolov3-tiny.cfg')
+        weights_path      = rospy.get_param('~weights_path',         '/home/agilex/yolov3-tiny.weights')
         self.target_class = rospy.get_param('~target_class',         'sports ball')
         self.conf_thresh  = rospy.get_param('~confidence_threshold', 0.5)
         self.nms_thresh   = rospy.get_param('~nms_threshold',        0.45)
         self.hfov         = rospy.get_param('~camera_hfov',          60.0)
-        self.input_size   = 640
+        self.input_size   = 416  # YOLOv3-tiny usa 416x416
 
-        rospy.loginfo("yolo_detector: carregando modelo ONNX: %s", model_path)
-        self.net = cv2.dnn.readNetFromONNX(model_path)
+        rospy.loginfo("yolo_detector: carregando modelo darknet...")
+        self.net = cv2.dnn.readNetFromDarknet(cfg_path, weights_path)
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+
+        # Camadas de saída do YOLOv3
+        layer_names = self.net.getLayerNames()
+        self.output_layers = [
+            layer_names[i[0] - 1]
+            for i in self.net.getUnconnectedOutLayers()
+        ]
+
         rospy.loginfo("yolo_detector: modelo carregado. Classe alvo: '%s'", self.target_class)
 
-        # [found(0/1), cx_norm(-1..1), cy_norm(-1..1), area_px2, angle_deg]
         self.pub_detection = rospy.Publisher(
             '/yolo/detection', Float32MultiArray, queue_size=1)
         self.pub_class = rospy.Publisher(
@@ -75,49 +82,48 @@ class YoloDetector:
 
         height, width = frame.shape[:2]
 
-        # Pré-processamento: redimensiona para 640x640, normaliza e converte para blob
         blob = cv2.dnn.blobFromImage(
             frame, 1.0 / 255.0, (self.input_size, self.input_size),
             swapRB=True, crop=False)
         self.net.setInput(blob)
-        raw_output = self.net.forward()  # (1, 84, 8400)
+        outs = self.net.forward(self.output_layers)
 
-        # Pós-processamento
-        output = raw_output[0].T  # (8400, 84)
-        boxes_raw   = output[:, :4]        # cx, cy, w, h em escala 640x640
-        class_scores = output[:, 4:]       # 80 scores de classe
+        boxes       = []
+        confidences = []
 
-        class_ids    = np.argmax(class_scores, axis=1)
-        confidences  = class_scores[np.arange(len(class_ids)), class_ids]
+        target_id = COCO_CLASSES.index(self.target_class) \
+            if self.target_class in COCO_CLASSES else -1
 
-        # Filtra pela classe alvo e confiança mínima
-        target_id = COCO_CLASSES.index(self.target_class) if self.target_class in COCO_CLASSES else -1
-        mask = (confidences >= self.conf_thresh) & (class_ids == target_id)
+        for out in outs:
+            for detection in out:
+                scores     = detection[5:]
+                class_id   = int(np.argmax(scores))
+                confidence = float(scores[class_id])
 
-        boxes_raw   = boxes_raw[mask]
-        confidences = confidences[mask]
+                if class_id != target_id or confidence < self.conf_thresh:
+                    continue
 
-        detection_msg = Float32MultiArray()
-        debug_frame   = frame.copy()
+                cx = int(detection[0] * width)
+                cy = int(detection[1] * height)
+                w  = int(detection[2] * width)
+                h  = int(detection[3] * height)
+                x  = cx - w // 2
+                y  = cy - h // 2
+
+                boxes.append([x, y, w, h])
+                confidences.append(confidence)
+
+        detection_msg  = Float32MultiArray()
+        debug_frame    = frame.copy()
         detected_class = ""
 
-        if len(boxes_raw) > 0:
-            # Converte cx,cy,w,h → x,y,w,h para NMS
-            x_scale = width  / self.input_size
-            y_scale = height / self.input_size
-            nms_boxes = []
-            for cx, cy, w, h in boxes_raw:
-                x1 = int((cx - w / 2) * x_scale)
-                y1 = int((cy - h / 2) * y_scale)
-                nms_boxes.append([x1, y1, int(w * x_scale), int(h * y_scale)])
-
+        if boxes:
             indices = cv2.dnn.NMSBoxes(
-                nms_boxes, confidences.tolist(), self.conf_thresh, self.nms_thresh)
+                boxes, confidences, self.conf_thresh, self.nms_thresh)
 
             if len(indices) > 0:
-                # Pega a detecção com maior confiança após NMS
-                idx = indices[0][0] if isinstance(indices[0], (list, np.ndarray)) else indices[0]
-                x, y, w, h = nms_boxes[idx]
+                idx  = indices[0][0]
+                x, y, w, h = boxes[idx]
                 conf = confidences[idx]
 
                 cx_px = x + w // 2
@@ -129,7 +135,7 @@ class YoloDetector:
                 angle_deg = cx_norm * (self.hfov / 2.0)
 
                 detection_msg.data = [1.0, cx_norm, cy_norm, area, angle_deg]
-                detected_class = self.target_class
+                detected_class     = self.target_class
 
                 cv2.rectangle(debug_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.circle(debug_frame, (cx_px, cy_px), 6, (0, 0, 255), -1)
@@ -141,8 +147,6 @@ class YoloDetector:
                 rospy.loginfo_throttle(1.0,
                     "YOLO | '%s' conf=%.2f | angle=%.1f deg | area=%.0f",
                     self.target_class, conf, angle_deg, area)
-            else:
-                detection_msg.data = [0.0, 0.0, 0.0, 0.0, 0.0]
         else:
             detection_msg.data = [0.0, 0.0, 0.0, 0.0, 0.0]
             cv2.putText(debug_frame, "SEM ALVO YOLO", (10, 30),
