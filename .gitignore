@@ -2,3 +2,20 @@ logs/*.csv
 logs/*.png
 *.pyc
 __pycache__/
+
+# Claude Code (config local — não publicar)
+.claude/
+
+# Material de referência de terceiros (não é meu trabalho)
+relatorios/relatorios_base/
+
+# Artefatos de compilação do LaTeX (lixo gerado)
+relatorios/**/*.aux
+relatorios/**/*.log
+relatorios/**/*.out
+relatorios/**/*.toc
+relatorios/**/*.lof
+relatorios/**/*.lot
+relatorios/**/*.synctex.gz
+relatorios/**/*.fls
+relatorios/**/*.fdb_latexmk

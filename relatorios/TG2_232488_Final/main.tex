@@ -1,0 +1,287 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+
+\usepackage[bottom]{footmisc}
+\usepackage{amssymb, amsmath, gensymb, enumitem, graphicx, float, geometry, indentfirst, parskip, array, upgreek, mathtools, tcolorbox, booktabs, fancyhdr, url, hyperref}
+\usepackage{subcaption, makecell, pgfplots, cancel, tabularx, algorithm}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Margens Padrão
+\geometry{
+  top=3cm,
+  bottom=2cm,
+  left=3cm,
+  right=2cm
+}
+
+% Parágrafos
+\setlength{\parindent}{1.25cm}
+
+% Aparência dos links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+    citecolor=black
+}
+
+% Numeração das páginas
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+
+% Garante nomes em português (legendas, listas e código)
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\listfigurename}{Lista de Figuras}
+\renewcommand{\listtablename}{Lista de Tabelas}
+\renewcommand{\lstlistingname}{Código}
+\renewcommand{\lstlistlistingname}{Lista de Códigos}
+
+% Evita que nomes longos (identificadores em \texttt) estourem a margem
+\setlength{\emergencystretch}{2em}
+
+\begin{document}
+
+\begin{titlepage}
+    % Ajusta as margens temporariamente para centralizar perfeitamente na folha
+    \newgeometry{left=2.5cm, right=2.5cm, top=3cm, bottom=2cm}
+    
+    \begin{center}
+        % Se a imagem não carregar, verifique o caminho do arquivo
+        \includegraphics[width=0.15\textwidth]{images/others/UnicampLogo.png}\\[1cm]    
+    
+        \Large Universidade Estadual de Campinas \\
+        Faculdade de Engenharia Mecânica (FEM) \\
+        Engenharia de Controle e Automação \\[3cm]
+
+        \rule{\textwidth}{0.5pt} 
+        \Huge \textbf{ES952 – Trabalho de Graduação II} \\[3mm]
+        \Large Relatório Final \\[1cm]
+        \Large \textbf{Implementação de estratégias de navegação autônoma baseadas em fusão sensorial para veículos de 4 rodas}
+        \rule{\textwidth}{0.5pt} 
+        
+    \end{center}
+    
+    \vfill
+    
+    \large
+    \noindent 
+    \textbf{Professor Orientador} \\[2mm]
+    Prof. Dr. Ely Carneiro de Paiva
+
+    \vspace{0.5cm}
+
+    \noindent
+    \begin{minipage}[t]{0.7\textwidth}
+        \textbf{Aluno} \\[2mm]
+        Bruno Monteiro Bonetti
+    \end{minipage}
+    \begin{minipage}[t]{0.29\textwidth}
+        \raggedleft
+        \textbf{RA} \\[2mm]
+        232488
+    \end{minipage}
+
+    \vspace{1.5cm}
+    \begin{center}
+        Julho/2026
+    \end{center}
+    
+    \restoregeometry
+\end{titlepage}
+
+% ══════════════════════════════════════════════════════════════
+% FOLHA DE ROSTO (segunda página)
+% ══════════════════════════════════════════════════════════════
+\begin{titlepage}
+    \newgeometry{left=2.5cm, right=2.5cm, top=3cm, bottom=2cm}
+
+    \begin{center}
+        \includegraphics[width=0.15\textwidth]{images/others/UnicampLogo.png}\\[1cm]
+
+        \Large Universidade Estadual de Campinas \\
+        Faculdade de Engenharia Mecânica (FEM) \\
+        Engenharia de Controle e Automação \\[3cm]
+
+        \rule{\textwidth}{0.5pt}
+        \Huge \textbf{ES952 – Trabalho de Graduação II} \\[3mm]
+        \Large Relatório Final \\[1cm]
+        \Large \textbf{Implementação de estratégias de navegação autônoma baseadas em fusão sensorial para veículos de 4 rodas}
+        \rule{\textwidth}{0.5pt}
+    \end{center}
+
+    \vfill
+
+    \large
+    \noindent
+    \textbf{Curso:} Engenharia de Controle e Automação
+
+    \vspace{0.4cm}
+
+    \noindent
+    Trabalho de Conclusão de Curso, apresentado à Comissão de Graduação da
+    Faculdade de Engenharia Mecânica, como requisito para a obtenção do título de
+    Engenheiro de Controle e Automação.
+
+    \vspace{1.2cm}
+
+    \noindent
+    \textbf{Professor Orientador} \\[2mm]
+    Prof. Dr. Ely Carneiro de Paiva
+
+    \vspace{0.5cm}
+
+    \noindent
+    \begin{minipage}[t]{0.7\textwidth}
+        \textbf{Aluno} \\[2mm]
+        Bruno Monteiro Bonetti
+    \end{minipage}
+    \begin{minipage}[t]{0.29\textwidth}
+        \raggedleft
+        \textbf{RA} \\[2mm]
+        232488
+    \end{minipage}
+
+    \vspace{1.5cm}
+    \begin{center}
+        Campinas, Julho de 2026 \\
+        S.P. -- Brasil
+    \end{center}
+
+    \restoregeometry
+\end{titlepage}
+
+% ══════════════════════════════════════════════════════════════
+% ÍNDICE
+% ══════════════════════════════════════════════════════════════
+\renewcommand{\contentsname}{Índice}
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+% RESUMO
+% ══════════════════════════════════════════════════════════════
+\section*{Resumo}
+\addcontentsline{toc}{section}{Resumo}
+
+\noindent BONETTI, Bruno M. \textit{Implementação de estratégias de navegação
+autônoma baseadas em fusão sensorial para veículos de 4 rodas}. Faculdade de
+Engenharia Mecânica, Universidade Estadual de Campinas, Trabalho de Conclusão de
+Curso, 2026.
+
+\vspace{0.5cm}
+
+\noindent Este trabalho aborda o desenvolvimento e a implementação de um sistema
+de seguimento autônomo de alvos na plataforma robótica AgileX LIMO, utilizando o
+arcabouço de software ROS. São propostos dois modos de operação complementares. No
+primeiro, a percepção do alvo se dá por segmentação de cor no espaço HSV, e a
+fusão sensorial entre a câmera e o sensor LiDAR combina a direção fornecida pela
+imagem com a distância medida pelo laser, alimentando um controlador proporcional
+que mantém o robô a uma distância configurável do alvo. No segundo modo, a
+detecção por cor é substituída pela rede neural de detecção de objetos YOLO, que
+identifica alvos por categoria, e introduz-se uma camada de execução de tarefas
+baseada em ações primitivas. Esse modo incorpora ainda um freio de segurança
+baseado no LiDAR e uma estratégia de aproximação por campos potenciais artificiais,
+combinando uma força atrativa em direção ao alvo com uma força repulsiva que evita
+colisões com obstáculos. O sistema foi implementado em Python e validado em
+\textit{hardware} real, demonstrando a detecção dos alvos, a fusão consistente dos
+sensores e o comportamento de seguimento e aproximação autônomos.
+
+\vspace{0.5cm}
+
+\noindent \textbf{Palavras-chave:} robótica móvel, navegação autônoma, fusão
+sensorial, LiDAR, YOLO, campos potenciais, ROS.
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+% LISTA DE FIGURAS E TABELAS
+% ══════════════════════════════════════════════════════════════
+\addcontentsline{toc}{section}{Lista de Figuras}
+\listoffigures
+\newpage
+
+\addcontentsline{toc}{section}{Lista de Tabelas}
+\listoftables
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+% LISTA DE EQUAÇÕES
+% ══════════════════════════════════════════════════════════════
+\section*{Lista de Equações}
+\addcontentsline{toc}{section}{Lista de Equações}
+
+\newcommand{\eqitem}[2]{%
+  \noindent Equação~\ref{#1} --- #2 \dotfill \pageref{#1}\par\vspace{3pt}}
+
+\eqitem{eq:cinematica}{Cinemática do modo diferencial do LIMO.}
+\eqitem{eq:hsv}{Máscara binária de segmentação no espaço HSV.}
+\eqitem{eq:confianca}{Pontuação de confiança de uma detecção do YOLO.}
+\eqitem{eq:iou}{\textit{Intersection over Union} (IoU).}
+\eqitem{eq:tensor}{Dimensão do tensor de saída do YOLO.}
+\eqitem{eq:custo}{Função de custo do YOLO.}
+\eqitem{eq:potencial}{Potencial artificial total (atrativo + repulsivo).}
+\eqitem{eq:fatrativa}{Força atrativa em direção ao alvo.}
+\eqitem{eq:repulsivo}{Potencial repulsivo com raio de influência.}
+\eqitem{eq:angulo}{Ângulo do alvo em relação ao centro da imagem.}
+\eqitem{eq:filtro}{Filtro de suavização exponencial da fusão sensorial.}
+\eqitem{eq:controlador}{Lei de controle proporcional do seguidor.}
+\eqitem{eq:freio}{Condição de acionamento do freio de segurança.}
+\eqitem{eq:aproximacao}{Controle da aproximação por campos potenciais.}
+\eqitem{eq:yaw}{Ângulo de guinada (\textit{yaw}) a partir do quatérnion.}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+% LISTA DE SÍMBOLOS
+% ══════════════════════════════════════════════════════════════
+\section*{Lista de Símbolos}
+\addcontentsline{toc}{section}{Lista de Símbolos}
+
+\renewcommand{\arraystretch}{1.3}
+\noindent
+\begin{tabular}{ll}
+$v$                    & Velocidade linear do robô \\
+$\omega$               & Velocidade angular do robô \\
+$\omega_L,\ \omega_R$  & Velocidades angulares das rodas esquerda e direita \\
+$r_w$                  & Raio da roda \\
+$b$                    & Distância entre as rodas (bitola) \\
+$H,\ S,\ V$            & Canais de matiz, saturação e valor (espaço HSV) \\
+$M(x,y)$               & Máscara binária de segmentação por cor \\
+$\theta_{alvo}$        & Ângulo do alvo em relação ao centro da imagem \\
+$c_x$                  & Posição horizontal do centro do alvo (pixels) \\
+$W$                    & Largura da imagem (pixels) \\
+HFOV                   & Campo de visão horizontal da câmera \\
+$\alpha$               & Fator de suavização do filtro exponencial \\
+$e_\theta,\ e_d$       & Erros angular e de distância \\
+$K_{p,\omega},\ K_{p,v}$ & Ganhos proporcionais angular e linear (seguidor) \\
+$\Pr(\cdot)$           & Probabilidade \\
+IoU                    & \textit{Intersection over Union} \\
+$S,\ B,\ C$            & Células da grade, caixas por célula e nº de classes (YOLO) \\
+$\mathcal{L}$          & Função de custo do YOLO \\
+$U$                    & Potencial artificial \\
+$\vec{F}$              & Força resultante \\
+$k_{att},\ k_{rep}$    & Ganhos atrativo e repulsivo (teoria) \\
+$\rho,\ \rho_0$        & Distância ao obstáculo e raio de influência \\
+$k_p,\ k_R$            & Ganhos atrativo e repulsivo (implementação) \\
+$d$                    & Distância medida pelo LiDAR \\
+$d_{alvo}$             & Distância desejada ao alvo \\
+$d_0$                  & Raio de influência da força repulsiva \\
+$d_{seg}$              & Distância de acionamento do freio de segurança \\
+$\psi$                 & Ângulo de guinada (\textit{yaw}) \\
+$q_w,\ q_x,\ q_y,\ q_z$ & Componentes do quatérnion de orientação \\
+\end{tabular}
+
+\newpage
+
+\input{conteudo}
+\input{referencias}
+
+\end{document}
