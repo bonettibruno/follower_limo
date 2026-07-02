@@ -3,10 +3,9 @@ logs/*.png
 *.pyc
 __pycache__/
 
-# Claude Code (config local — não publicar)
 .claude/
 
-# Material de referência de terceiros (não é meu trabalho)
+# Material de referência de terceiros
 relatorios/relatorios_base/
 
 # Artefatos de compilação do LaTeX (lixo gerado)
