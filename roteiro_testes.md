@@ -188,9 +188,15 @@ Os CSVs ficam em `~/agilex_ws/src/follower_limo/logs/` no robô.
 No seu **PC** (não no SSH):
 ```bash
 scp agilex@IP_DO_LIMO:~/agilex_ws/src/follower_limo/logs/*.csv ./logs/
-python tools/plot_task.py logs/task_AAAAMMDD_HHMMSS.csv
+pip install matplotlib          # só na primeira vez
+python tools/plot_task.py logs/task_AAAAMMDD_HHMMSS.csv --target 0.5
 ```
-Isso gera o PNG com os 6 painéis para cada experimento.
+- Gera o PNG com os 6 painéis (incluindo a posição estimada do objeto na trajetória).
+- **Imprime as métricas** no terminal e numa caixa no gráfico: distância final,
+  erro em relação ao alvo, tempo de acomodação, obstáculo mínimo (e se o freio
+  disparou), ângulo inicial/final e caminho percorrido.
+- Use `--target` com a distância-alvo que você configurou naquele experimento
+  (o mesmo valor do `target_dist` no comando de aproximação).
 
 ---
 
