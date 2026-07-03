@@ -39,7 +39,7 @@ A escolha pela integração entre câmera e LiDAR justifica-se pela busca por re
 
 O LIMO é uma plataforma robótica móvel compacta desenvolvida pela AgileX
 Robotics, projetada para pesquisa e ensino em robótica móvel~\cite{pimenta2024limo}.
-Apesar do porte reduzido — ideal para espaços de trabalho limitados —, o robô é
+Apesar do porte reduzido (ideal para espaços de trabalho limitados), o robô é
 equipado com sensores e capacidade computacional suficientes para estudos de
 navegação autônoma, SLAM, mapeamento, planejamento de trajetórias e desvio de
 obstáculos. A Figura~\ref{fig:limo_pro} mostra o modelo LIMO Pro utilizado neste
@@ -47,8 +47,8 @@ trabalho.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{images/tg1/introducao/limo_pro.png}
-  \caption{LIMO Pro da AgileX Robotics.}
+  \includegraphics[width=0.5\textwidth]{images/fotos_tiradas/foto_limo_minha_fix.jpg}
+  \caption{Plataforma LIMO Pro da AgileX Robotics utilizada neste trabalho.}
   \label{fig:limo_pro}
 \end{figure}
 
@@ -59,17 +59,17 @@ configurações cinemáticas diferentes, selecionáveis mecanicamente por travas
 parte frontal do chassi~\cite{pimenta2024limo}:
 
 \begin{itemize}
-  \item \textbf{Diferencial}: quatro rodas em que as duas de um mesmo lado são
+  \item Diferencial: quatro rodas em que as duas de um mesmo lado são
   acionadas em conjunto; a diferença de velocidade entre os lados produz rotação.
-  \item \textbf{Esteira}: sobrepõem-se esteiras às rodas, oferecendo maior tração
+  \item Esteira: sobrepõem-se esteiras às rodas, oferecendo maior tração
   e estabilidade em terrenos irregulares; é controlado como o modo diferencial.
-  \item \textbf{Omnidirecional}: com rodas Mecanum, permite deslocamentos
+  \item Omnidirecional: com rodas Mecanum, permite deslocamentos
   longitudinais e laterais independentes da orientação do robô.
-  \item \textbf{Ackermann}: direção do tipo automóvel, adequada à validação de
+  \item Ackermann: direção do tipo automóvel, adequada à validação de
   algoritmos para veículos não-holonômicos.
 \end{itemize}
 
-Neste trabalho o robô é utilizado na configuração \textbf{diferencial}. Nesse
+Neste trabalho o robô é utilizado na configuração diferencial. Nesse
 modo, as velocidades linear $v$ e angular $\omega$ do robô relacionam-se com as
 velocidades angulares das rodas esquerda ($\omega_L$) e direita ($\omega_R$)
 por~\cite{pimenta2024limo}:
@@ -82,13 +82,13 @@ por~\cite{pimenta2024limo}:
 
 onde $r_w$ é o raio da roda e $b$ a distância entre as rodas de lados opostos. O
 controlador de baixo nível embarcado no LIMO converte automaticamente os comandos
-de alto nível $u = [\,v \;\; \omega\,]^T$ — publicados no tópico \texttt{/cmd\_vel}
-— nos sinais PWM enviados aos motores, de modo que o desenvolvedor trabalha
+de alto nível $u = [\,v \;\; \omega\,]^T$ (publicados no tópico \texttt{/cmd\_vel})
+nos sinais PWM enviados aos motores, de modo que o desenvolvedor trabalha
 diretamente no nível das velocidades linear e angular.
 
 \subsubsection{Computador de Bordo e Software}
 
-O processamento embarcado é realizado por uma placa \textbf{NVIDIA Jetson Nano},
+O processamento embarcado é realizado por uma placa NVIDIA Jetson Nano,
 que integra uma CPU quad-core ARM Cortex-A57 de 64 bits a 1,43~GHz, 4~GB de
 memória RAM LPDDR4 e uma GPU Maxwell de 128 núcleos com suporte a aceleração de
 aprendizado profundo~\cite{pimenta2024limo}. Essa GPU é o que viabiliza a
@@ -98,7 +98,7 @@ aproximadamente 40 minutos em operação ativa. O robô conta ainda com uma unid
 de medição inercial (IMU) de 6 graus de liberdade e um chassi metálico de cerca
 de 4,8~kg que suporta até 4~kg de carga útil.
 
-Em software, a Jetson Nano executa \textbf{Ubuntu 18.04} com o SDK NVIDIA
+Em software, a Jetson Nano executa Ubuntu 18.04 com o SDK NVIDIA
 JetPack. O driver do robô é fornecido pela AgileX como um pacote ROS
 (\texttt{limo\_base}), responsável pela comunicação com o chassi, pela publicação
 da odometria e pela recepção dos comandos de velocidade. O pacote
@@ -108,7 +108,7 @@ laser~\cite{pimenta2024limo}.
 
 \subsubsection{LiDAR — EAI T-Mini Pro}
 
-O sensor LiDAR utilizado é o \textbf{EAI T-Mini Pro (YDLidar)}, que realiza
+O sensor LiDAR utilizado é o EAI T-Mini Pro (YDLidar), que realiza
 varreduras angulares do ambiente emitindo feixes de laser e medindo o tempo de
 retorno de cada pulso. O resultado é um conjunto de pares $(\theta, d)$, onde
 $\theta$ é o ângulo e $d$ é a distância até o obstáculo mais próximo naquela
@@ -144,7 +144,7 @@ pelo LiDAR em diferentes ambientes.
 
 \subsubsection{Câmera — Orbbec Astra (Dabai U3)}
 
-A câmera utilizada é a \textbf{Orbbec Astra Dabai U3}, uma câmera RGB-D
+A câmera utilizada é a Orbbec Astra Dabai U3, uma câmera RGB-D
 (colorida com profundidade) com campo de visão horizontal de $60°$ e resolução
 de $640 \times 480$ pixels a 30 fps. Neste projeto é utilizado apenas o canal
 RGB, publicado no tópico \texttt{/camera/rgb/image\_raw}. A figura~\ref{fig:teste_camera} mostra o tópico sendo monitorado via Foxglove Studio durante os testes.
@@ -163,7 +163,7 @@ RGB, publicado no tópico \texttt{/camera/rgb/image\_raw}. A figura~\ref{fig:tes
 O Robot Operating System (ROS) é um arcabouço de software (\textit{framework})
 de código aberto voltado ao desenvolvimento de aplicações
 robóticas~\cite{quigley2009ros}. Apesar do nome, não se trata de um sistema
-operacional convencional, mas de um \textit{meta}-sistema operacional que roda
+operacional convencional, mas de um meta-sistema operacional que roda
 sobre o Linux e provê os serviços que se esperaria de um sistema operacional no
 contexto da robótica: abstração de \textit{hardware}, controle de dispositivos em
 baixo nível, troca de mensagens entre processos e gerenciamento de pacotes, além
@@ -172,29 +172,29 @@ de código distribuído entre múltiplos computadores~\cite{quigley2015programmi
 
 A principal motivação do ROS é facilitar a integração e o reúso de software em
 robótica. Em vez de um único programa monolítico, o sistema é decomposto em vários
-blocos independentes — os \textbf{nós} (\textit{nodes}) —, cada um responsável por
+blocos independentes, os nós (\textit{nodes}), cada um responsável por
 uma tarefa pequena e bem definida, como a aquisição de dados de um sensor, uma
 malha de controle ou o acionamento de um atuador. Essa modularidade permite
 desenvolver, testar e substituir cada componente isoladamente, característica
 diretamente explorada neste trabalho, no qual cada etapa do \textit{pipeline} é
 implementada como um nó separado.
 
-Neste projeto é utilizado o \textbf{ROS 1 Melodic}, rodando sobre Ubuntu 18.04 no
+Neste projeto é utilizado o ROS 1 Melodic, rodando sobre Ubuntu 18.04 no
 \textit{hardware} embarcado (NVIDIA Jetson Nano) do LIMO.
 
 \subsubsection{Arquitetura \textit{Publish-Subscribe}}
 
 A comunicação entre os nós segue majoritariamente o padrão
-\textit{publish-subscribe}. Um nó \textbf{publica} (\textit{publisher}) mensagens
-em um \textbf{tópico} nomeado, e qualquer outro nó interessado pode \textbf{assinar}
+\textit{publish-subscribe}. Um nó publica (\textit{publisher}) mensagens
+em um tópico nomeado, e qualquer outro nó interessado pode assinar
 (\textit{subscriber}) esse tópico para recebê-las, sem que haja acoplamento direto
 entre eles: o publicador não sabe quais nós são os assinantes, e vice-versa. Esse
-desacoplamento é o que confere flexibilidade ao sistema — foi ele, por exemplo,
+desacoplamento é o que confere flexibilidade ao sistema: foi ele, por exemplo,
 que permitiu reaproveitar o nó \texttt{lidar\_reader} no modo de tarefas apenas
 remapeando o tópico de entrada, sem alterar seu código.
 
 O registro e a descoberta dos nós e tópicos são coordenados por um processo mestre,
-o \textbf{\texttt{roscore}} (ROS \textit{Master}). É ele quem permite que um
+o \texttt{roscore} (ROS \textit{Master}). É ele quem permite que um
 publicador e um assinante se localizem; após esse contato inicial, a troca de
 mensagens ocorre diretamente entre os nós. A Figura~\ref{fig:pubsub} ilustra o
 conceito.
@@ -233,23 +233,23 @@ publicador ao assinante (linhas cheias).}
 Os principais conceitos do ROS utilizados neste trabalho são:
 
 \begin{itemize}
-  \item \textbf{Nós (\textit{Nodes})}: processos independentes, cada um
+  \item Nós (\textit{Nodes}): processos independentes, cada um
   responsável por uma tarefa específica. Neste projeto, cada etapa do
   \textit{pipeline} (detecção, leitura do LiDAR, fusão, controle) é um nó separado.
 
-  \item \textbf{Tópicos (\textit{Topics})}: canais de comunicação assíncronos
+  \item Tópicos (\textit{Topics}): canais de comunicação assíncronos
   pelos quais os nós trocam mensagens, no padrão \textit{publish-subscribe}.
 
-  \item \textbf{Mensagens (\textit{Messages})}: estruturas de dados tipadas que
+  \item Mensagens (\textit{Messages}): estruturas de dados tipadas que
   trafegam pelos tópicos. Exemplos usados neste projeto:
   \texttt{sensor\_msgs/LaserScan} para dados do LiDAR, \texttt{sensor\_msgs/Image}
   para \textit{frames} da câmera e \texttt{geometry\_msgs/Twist} para comandos de
   velocidade.
 
-  \item \textbf{\textit{Master} (\texttt{roscore})}: processo central que registra
+  \item \textit{Master} (\texttt{roscore}): processo central que registra
   nós e tópicos e viabiliza que publicadores e assinantes se encontrem.
 
-  \item \textbf{Pacotes (\textit{Packages})}: unidade de organização do código,
+  \item Pacotes (\textit{Packages}): unidade de organização do código,
   reunindo nós, bibliotecas, arquivos de configuração e \textit{launchers}. Todo o
   código deste trabalho está organizado no pacote \texttt{follower\_limo}.
 \end{itemize}
@@ -262,7 +262,7 @@ desenvolvimento e a depuração. Os mais utilizados neste trabalho foram: o
 \texttt{roslaunch}, que executam nós individualmente ou em conjunto a partir de
 arquivos \texttt{.launch}; e o \texttt{rostopic}, que permite inspecionar,
 publicar e medir a frequência das mensagens em um tópico. A visualização dos dados
-em tempo real — imagens da câmera, detecções e varreduras do LiDAR — foi feita com
+em tempo real (imagens da câmera, detecções e varreduras do LiDAR) foi feita com
 o Foxglove Studio, conectado ao ROS por meio do \texttt{foxglove\_bridge}.
 
 % --------------------------------------------------------------
@@ -276,22 +276,22 @@ A primeira abordagem de percepção deste trabalho baseia-se na segmentação po
 cor. Embora as câmeras forneçam a imagem no espaço RGB (ou BGR, no OpenCV), esse
 espaço mistura, em seus três canais, tanto a informação cromática quanto a
 luminosidade, o que o torna sensível a variações de iluminação. Por esse motivo,
-adota-se o espaço \textbf{HSV} (\textit{Hue, Saturation, Value}), que
+adota-se o espaço HSV (\textit{Hue, Saturation, Value}), que
 separa a cor em três componentes com significado
 perceptual~\cite{gonzalez2018digital}:
 
 \begin{itemize}
-  \item \textbf{Matiz (\textit{Hue})}: o tom da cor, representado como um ângulo
+  \item Matiz (\textit{Hue}): o tom da cor, representado como um ângulo
   no círculo cromático ($0°$ a $360°$);
-  \item \textbf{Saturação (\textit{Saturation})}: a pureza ou intensidade da cor;
-  \item \textbf{Valor (\textit{Value})}: o brilho.
+  \item Saturação (\textit{Saturation}): a pureza ou intensidade da cor;
+  \item Valor (\textit{Value}): o brilho.
 \end{itemize}
 
 A vantagem prática é que a identidade cromática de um objeto concentra-se
 principalmente no canal de matiz, relativamente independente do brilho. Assim, a
 segmentação torna-se mais robusta a mudanças de iluminação do que seria no espaço
 RGB. A detecção consiste em construir uma máscara binária $M(x,y)$ que isola os
-\textit{pixels} cujos valores caem dentro de faixas pré-definidas:
+pixels cujos valores caem dentro de faixas pré-definidas:
 
 \begin{equation}
   \label{eq:hsv}
@@ -302,31 +302,31 @@ RGB. A detecção consiste em construir uma máscara binária $M(x,y)$ que isola
   \end{cases}
 \end{equation}
 
-Cores que cruzam a origem do círculo de matiz — como o vermelho, situado
-simultaneamente próximo a $0°$ e a $360°$ — exigem duas faixas de matiz
+Cores que cruzam a origem do círculo de matiz (como o vermelho, situado
+simultaneamente próximo a $0°$ e a $360°$) exigem duas faixas de matiz
 combinadas. Após a limiarização, operações morfológicas removem ruído e o maior
 contorno válido é tomado como o alvo. Os detalhes de implementação deste processo
 são apresentados na Seção~\ref{sec:modo1}.
 
 \subsubsection{Fusão Sensorial}
 
-A detecção por cor localiza o alvo \textit{angularmente} na imagem, mas não
-informa a que \textit{distância} ele está. Câmeras RGB, isoladamente, carecem de
+A detecção por cor localiza o alvo angularmente na imagem, mas não
+informa a que distância ele está. Câmeras RGB, isoladamente, carecem de
 precisão métrica de profundidade; o LiDAR, por outro lado, mede distâncias com
 exatidão, mas não distingue a natureza ou a cor dos objetos. A
-\textbf{fusão sensorial} combina essas modalidades complementares para obter uma
+fusão sensorial combina essas modalidades complementares para obter uma
 estimativa mais completa e confiável do que qualquer sensor forneceria
 sozinho~\cite{zhang2019robust}.
 
 A literatura costuma classificar a fusão em três níveis: no nível de dados brutos,
 no nível de características (\textit{feature-level}) e no nível de decisão. Neste
-trabalho emprega-se a fusão em \textbf{nível de características}: extrai-se o
+trabalho emprega-se a fusão em nível de características: extrai-se o
 ângulo do alvo a partir da câmera e a distância a partir do LiDAR naquela mesma
 direção, unindo-os em uma estimativa geométrica única da posição relativa do
 alvo. Para atenuar ruídos e saltos nas leituras, aplica-se ainda um filtro de
 suavização exponencial, detalhado na Seção~\ref{sec:modo1}. Essa estratégia de
-redundância eleva a robustez do sistema: falhas momentâneas de um sensor — como
-uma oclusão parcial ou uma variação brusca de iluminação — são mitigadas pela
+redundância eleva a robustez do sistema: falhas momentâneas de um sensor (como
+uma oclusão parcial ou uma variação brusca de iluminação) são mitigadas pela
 informação do outro~\cite{nguyen2020lidar}.
 
 % --------------------------------------------------------------
@@ -334,7 +334,7 @@ informação do outro~\cite{nguyen2020lidar}.
 % --------------------------------------------------------------
 
 A detecção de objetos é a tarefa de visão computacional que busca responder a duas
-perguntas sobre uma imagem: \textit{quais} objetos existem e \textit{onde} eles
+perguntas sobre uma imagem: quais objetos existem e onde eles
 estão localizados~\cite{zou2023survey}. O YOLO (\textit{You Only Look Once}) é um
 algoritmo de detecção de objetos baseado em aprendizado profundo, proposto
 originalmente por~\cite{redmon2016yolo}. Sua
@@ -401,12 +401,12 @@ A arquitetura do YOLO pode ser dividida em três componentes
 principais~\cite{ali2024yolo}:
 
 \begin{itemize}
-  \item \textbf{\textit{Backbone}}: rede convolucional que extrai características
+  \item \textit{Backbone}: rede convolucional que extrai características
   (\textit{features}) da imagem em múltiplas escalas, empilhando camadas
   convolucionais.
-  \item \textbf{\textit{Neck}}: processa e combina os mapas de características de
+  \item \textit{Neck}: processa e combina os mapas de características de
   diferentes níveis, garantindo informação multi-escala.
-  \item \textbf{\textit{Head}}: a partir das características fundidas, prevê as
+  \item \textit{Head}: a partir das características fundidas, prevê as
   caixas delimitadoras e as probabilidades de classe. A versão YOLOv3 introduziu
   o uso de \textit{anchor boxes} em múltiplas escalas na \textit{head},
   melhorando a detecção de objetos de tamanhos variados~\cite{jiang2022yolo}.
@@ -443,14 +443,37 @@ erros nas probabilidades de classe~\cite{redmon2016yolo}:
 
 \subsubsection{YOLO neste Projeto}
 
-Neste trabalho utiliza-se o \textbf{YOLOv3-tiny} no formato \textit{darknet},
+Neste trabalho utiliza-se o YOLOv3-tiny no formato \textit{darknet},
 carregado através do módulo \texttt{cv2.dnn} da biblioteca OpenCV. Essa escolha
 decorre de restrições de compatibilidade do ambiente embarcado: o robô opera com
 Python~3.6 e OpenCV~4.1.1, versões que impossibilitam o uso de \textit{frameworks}
 mais recentes. O modelo é pré-treinado sobre o conjunto de dados MS-COCO, que
 contém 80 classes de objetos, permitindo detectar categorias como
 \textit{sports ball}, \textit{person}, \textit{laptop} e \textit{bottle} sem
-necessidade de novo treinamento.
+necessidade de novo treinamento. A Figura~\ref{fig:yolo_exemplos} mostra dois
+exemplos de detecção realizados pela rede embarcada no LIMO.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/fotos_tiradas/yolo_backpack_5.png}
+    \caption{Mochila (\textit{backpack})}
+    \label{fig:yolo_backpack}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/fotos_tiradas/yolo_chair.png}
+    \caption{Cadeira (\textit{chair})}
+    \label{fig:yolo_chair}
+  \end{subfigure}
+  \caption{Exemplos de detecção do YOLOv3-tiny embarcado no LIMO. Para cada objeto,
+  o rótulo exibe a classe, a confiança da detecção e o ângulo horizontal em relação
+  ao centro da imagem; a caixa verde delimita o objeto e o ponto vermelho marca o
+  seu centro.}
+  \label{fig:yolo_exemplos}
+\end{figure}
 
 % --------------------------------------------------------------
 \subsection{Campos Potenciais}
@@ -459,10 +482,10 @@ necessidade de novo treinamento.
 
 O método dos campos potenciais artificiais, proposto por~\cite{khatib1986potential},
 é uma técnica clássica de navegação reativa amplamente empregada em robótica
-móvel — inclusive nas próprias aplicações de navegação do LIMO em ambientes
+móvel, inclusive nas próprias aplicações de navegação do LIMO em ambientes
 congestionados~\cite{pimenta2024limo}. A ideia central é modelar o robô como uma
 partícula sujeita a um campo de potencial artificial, no qual o objetivo exerce
-uma \textbf{força atrativa} e os obstáculos exercem \textbf{forças repulsivas}. O
+uma força atrativa e os obstáculos exercem forças repulsivas. O
 movimento resulta da soma vetorial dessas forças, conduzindo o robô até o alvo
 enquanto o afasta de colisões.
 
@@ -555,10 +578,10 @@ apresentados na Seção~\ref{sec:modo2}.
 % ══════════════════════════════════════════════════════════════
 
 O sistema foi desenvolvido em dois modos de operação independentes. O
-\textbf{Modo 1} realiza o seguimento de um alvo detectado por cor, combinando
-câmera e LiDAR via fusão sensorial. O \textbf{Modo 2} estende o sistema com
+Modo 1 realiza o seguimento de um alvo detectado por cor, combinando
+câmera e LiDAR via fusão sensorial. O Modo 2 estende o sistema com
 detecção de objetos por categoria usando a rede YOLO, uma biblioteca de ações
-primitivas, freio de segurança e aproximação por campos potenciais. Ambos os
+ações básicas, freio de segurança e aproximação por campos potenciais. Ambos os
 modos publicam comandos no tópico \texttt{/cmd\_vel}. O código-fonte foi
 desenvolvido em Python e está disponibilizado em um repositório Git, sob a
 referência \cite{bonetti2024follower}.
@@ -618,45 +641,21 @@ ilustrado na Figura~\ref{fig:pipeline}.
 \label{fig:pipeline}
 \end{figure}
 
-\subsubsection{Nó 1 — \texttt{color\_detector}}
+O pipeline é composto por quatro nós ROS, descritos a seguir e resumidos na
+Tabela~\ref{tab:nos_modo1}.
 
-\textbf{Função:} detectar o alvo colorido na imagem da câmera e calcular seu
-ângulo horizontal em relação ao centro do campo de visão.
-
-\textbf{Subscreve:} \texttt{/camera/rgb/image\_raw} (\texttt{sensor\_msgs/Image})
-
-\textbf{Publica:}
-\begin{itemize}
-  \item \texttt{/target/detection} — vetor \texttt{[found, cx\_norm, cy\_norm, area, angle\_deg]}
-  \item \texttt{/target/image\_debug} — imagem anotada com \textit{bounding box} para visualização
-\end{itemize}
-
-\textbf{Método:} segmentação por cor no espaço HSV com OpenCV. O frame é
-convertido de BGR para HSV, aplica-se uma máscara de cor para isolar o alvo,
-operações morfológicas removem ruído e o maior contorno válido é selecionado.
-O centro do contorno é convertido em ângulo usando o campo de visão da câmera:
+O \texttt{color\_detector} detecta o alvo por segmentação de cor no espaço HSV: o
+quadro é convertido de BGR para HSV, uma máscara isola a cor do alvo, operações
+morfológicas removem ruído e o maior contorno válido é selecionado. O centro do
+contorno é convertido em ângulo horizontal em relação ao centro da imagem:
 
 \begin{equation}
   \label{eq:angulo}
   \theta_{alvo} = \frac{c_x - W/2}{W/2} \cdot \frac{\text{HFOV}}{2}
 \end{equation}
 
-onde $c_x$ é a posição horizontal do centro do alvo em pixels e $W$ a largura
-da imagem.
-
-\begin{table}[H]
-\centering
-\caption{Parâmetros de segmentação cromática e geometria da câmera.}
-\label{tab:params_color}
-\begin{tabular}{lp{9cm}}
-\hline
-\textbf{Parâmetro (Unidade)} & \textbf{Descrição detalhada} \\ \hline
-Limiares HSV Primários & Faixas inferior e superior de Matiz, Saturação e Valor para isolar a cor alvo. \\
-Limiares HSV Secundários & Segunda faixa opcional de cores (utilizada para cores que cruzam o limite do círculo HSV, como o vermelho). \\
-Área Mínima do Contorno ($px^2$) & Filtro de área que desconsidera pequenos agrupamentos de pixels para eliminar ruídos visuais. \\
-HFOV da Câmera (graus) & Campo de visão horizontal do sensor, utilizado para converter a posição do pixel em ângulo real. \\ \hline
-\end{tabular}
-\end{table}
+onde $c_x$ é a posição horizontal do centro do alvo em pixels e $W$ a largura da
+imagem.
 
 A calibração dos valores HSV foi realizada com uma ferramenta auxiliar
 (\texttt{hsv\_calibrator.py}) que permite ajustar interativamente os limiares
@@ -686,104 +685,24 @@ e~\ref{fig:calibrador} ilustram o processo de calibração.
   \caption{Processo de calibração HSV para o alvo (copo verde neon).}
 \end{figure}
 
-\subsubsection{Nó 2 — \texttt{lidar\_reader}}
+O \texttt{lidar\_reader} recebe o ângulo estimado e retorna a distância medida
+pelo LiDAR naquela direção, adotando a mediana de uma janela de leituras vizinhas
+para maior robustez e descartando valores inválidos.
 
-\textbf{Função:} dado o ângulo calculado pela câmera, retornar a distância
-medida pelo LiDAR naquela direção.
-
-\textbf{Subscreve:}
-\begin{itemize}
-  \item \texttt{/scan} (\texttt{sensor\_msgs/LaserScan}) — varredura contínua do LiDAR
-  \item \texttt{/target/detection} — ângulo do alvo publicado pelo \texttt{color\_detector}
-\end{itemize}
-
-\textbf{Publica:} \texttt{/lidar/distance\_at\_angle} — vetor
-\texttt{[angle\_deg, distance\_m, valid]}
-
-\textbf{Método:} o ângulo em graus é convertido para o índice correspondente
-no array de ranges do \texttt{LaserScan}. Para robustez, a distância é calculada
-como a mediana de uma janela de 5 leituras vizinhas, descartando valores fora
-dos limites válidos e leituras \texttt{NaN}/\texttt{Inf}.
-
-\begin{table}[H]
-\centering
-\caption{Parâmetros de filtragem e leitura do sensor LiDAR.}
-\label{tab:params_lidar}
-\begin{tabular}{lp{9cm}}
-\hline
-\textbf{Parâmetro (Unidade)} & \textbf{Descrição detalhada} \\ \hline
-Faixa Angular Válida (graus) & Define o campo de visão frontal considerado para busca (ex: $\pm$ 60° em relação ao eixo central). \\
-Distância Mínima Válida (m) & Limite inferior para ignorar leituras muito próximas ao próprio corpo do robô ou ruídos. \\
-Distância Máxima Válida (m) & Limite superior para desconsiderar objetos muito distantes que não fazem parte do cenário de interesse. \\ \hline
-\end{tabular}
-\end{table}
-
-\subsubsection{Nó 3 — \texttt{sensor\_fusion}}
-
-\textbf{Função:} combinar direção (câmera) e distância (LiDAR) em uma estimativa
-suavizada da posição relativa do alvo, entregando ao controlador os erros prontos
-para uso.
-
-\textbf{Subscreve:}
-\begin{itemize}
-  \item \texttt{/target/detection}
-  \item \texttt{/lidar/distance\_at\_angle}
-\end{itemize}
-
-\textbf{Publica:} \texttt{/target/pose} — vetor
-\texttt{[found, angle\_deg, distance\_m, error\_angular\_norm, error\_distance\_m]}
-
-\textbf{Método:} a fusão é geométrica e direta (\textit{feature-level fusion}).
-Os valores brutos dos sensores são suavizados com um filtro exponencial:
+Em seguida, o \texttt{sensor\_fusion} combina a direção (câmera) e a distância
+(LiDAR) em uma estimativa suavizada da posição relativa do alvo (uma fusão em
+nível de características), aplicando um filtro exponencial para atenuar ruídos:
 
 \begin{equation}
   \label{eq:filtro}
   \hat{x}_t = \alpha \cdot x_t + (1 - \alpha) \cdot \hat{x}_{t-1}
 \end{equation}
 
-O erro angular normalizado $e_\theta \in [-1, 1]$ alimenta o controle de
-rotação, e o erro de distância $e_d = d - d_{desejada}$ alimenta o controle
-de avanço.
+do qual resultam o erro angular normalizado $e_\theta \in [-1, 1]$ e o erro de
+distância $e_d = d - d_{desejada}$.
 
-\begin{table}[H]
-\centering
-\caption{Parâmetros de configuração do nó de fusão sensorial.}
-\label{tab:params_fusion}
-\begin{tabular}{lp{9cm}}
-\hline
-\textbf{Parâmetro (Unidade)} & \textbf{Descrição detalhada} \\ \hline
-Distância Alvo (m) & Valor de referência que o robô deve manter em relação ao objeto detectado. \\
-\textit{Timeout} do Alvo (s) & Tempo máximo de persistência do dado de fusão antes de invalidar a posição. \\
-Fator de Suavização Angular ($\alpha$) & Coeficiente do filtro passa-baixa para suavizar as variações bruscas no ângulo do alvo. \\
-Fator de Suavização de Distância ($\alpha$) & Coeficiente aplicado para filtrar ruídos e saltos nas leituras de distância do LiDAR. \\ \hline
-\end{tabular}
-\end{table}
-
-\subsubsection{Nó 4 — \texttt{follower\_controller}}
-
-\textbf{Função:} converter os erros calculados pela fusão em comandos de
-velocidade para o robô.
-
-\textbf{Subscreve:} \texttt{/target/pose}
-
-\textbf{Publica:} \texttt{/cmd\_vel} (\texttt{geometry\_msgs/Twist})
-
-\textbf{Método:} controlador proporcional com três modos de
-operação:
-
-\begin{enumerate}
-  \item \textbf{Seguimento normal} — alvo visível: rotação proporcional ao
-  erro angular; avanço/recuo proporcional ao erro de distância (somente quando
-  já alinhado).
-
-  \item \textbf{Recovery behavior} — alvo perdido: o robô gira lentamente no
-  último sentido em que viu o alvo, tentando reencontrá-lo por até
-  \texttt{recovery\_timeout} segundos.
-
-  \item \textbf{Parada de segurança} — se o tópico \texttt{/target/pose} parar
-  de ser publicado por qualquer razão (falha de nó, etc.), um timer independente
-  zera \texttt{/cmd\_vel} em até 0,5 s.
-\end{enumerate}
+Por fim, o \texttt{follower\_controller} converte esses erros em comandos de
+velocidade por meio de um controlador proporcional:
 
 \begin{equation}
   \label{eq:controlador}
@@ -791,23 +710,25 @@ operação:
   v = K_{p,v} \cdot e_d \cdot \mathbf{1}_{|e_\theta| < 0{,}3}
 \end{equation}
 
+em que a velocidade de avanço só é aplicada quando o alvo já está aproximadamente
+alinhado ao centro ($|e_\theta| < 0{,}3$). O controlador possui ainda dois
+comportamentos auxiliares: uma busca ativa (\textit{recovery}), na qual o
+robô gira lentamente no último sentido em que viu o alvo para tentar reencontrá-lo,
+e uma parada de segurança, que zera a velocidade caso a estimativa de pose
+deixe de ser publicada.
 
 \begin{table}[H]
 \centering
-\caption{Parâmetros de configuração e controle do sistema de seguimento.}
-\label{tab:params_controller}
-\begin{tabular}{lp{9cm}}
+\footnotesize
+\caption{Nós do Modo 1 e suas funções.}
+\label{tab:nos_modo1}
+\begin{tabular}{@{}l p{3.3cm} p{3.5cm} p{3.3cm}@{}}
 \hline
-\textbf{Parâmetro (Unidade)} & \textbf{Descrição detalhada do comportamento} \\ \hline
-Ganho Angular ($K_p$) & Define a intensidade da correção de rotação para alinhar o robô ao centro do alvo. \\
-Ganho Linear ($K_p$) & Define a velocidade de aproximação ou recuo baseada no erro de distância. \\
-Velocidade Linear Máxima (m/s) & Limite superior de segurança para deslocamentos frontais e traseiros. \\
-Velocidade Angular Máxima (rad/s) & Limite superior para a velocidade de rotação no próprio eixo. \\
-Zona Morta Angular & Tolerância de erro de alinhamento para evitar oscilações constantes. \\
-Zona Morta de Distância (m) & Faixa de tolerância em torno da distância alvo de 1 metro. \\
-\textit{Timeout} de Segurança (s) & Intervalo máximo sem detecção antes da interrupção total dos motores (\textit{E-stop}). \\
-Velocidade de Recuperação (rad/s) & Velocidade constante aplicada para busca ativa em 360° após a perda do alvo. \\
-\textit{Timeout} de Busca (s) & Tempo limite para o comportamento de rotação antes de retornar ao estado de repouso. \\ \hline
+\textbf{Nó} & \textbf{Função} & \textbf{Assina} & \textbf{Publica} \\ \hline
+\texttt{color\_detector} & Detecta o alvo por cor (HSV) e calcula o seu ângulo & \texttt{/camera/rgb/image\_raw} & \texttt{/target/detection} \\[2pt]
+\texttt{lidar\_reader} & Mede a distância do LiDAR na direção do alvo & \texttt{/scan}, \texttt{/target/detection} & \texttt{/lidar/distance\_at\_angle} \\[2pt]
+\texttt{sensor\_fusion} & Funde ângulo e distância e suaviza os erros & \texttt{/target/detection}, \texttt{/lidar/distance\_at\_angle} & \texttt{/target/pose} \\[2pt]
+\texttt{follower\_controller} & Gera os comandos de velocidade (controle P) & \texttt{/target/pose} & \texttt{/cmd\_vel} \\ \hline
 \end{tabular}
 \end{table}
 
@@ -819,7 +740,7 @@ Velocidade de Recuperação (rad/s) & Velocidade constante aplicada para busca a
 O Modo 2 substitui a detecção por cor por detecção de objetos por categoria,
 usando a rede YOLO, e introduz uma camada de execução de tarefas. Em vez de um
 único comportamento de seguimento contínuo, o robô passa a executar sequências de
-\textbf{ações primitivas} (girar, avançar, procurar, aproximar-se, alertar),
+ações básicas (girar, avançar, procurar, aproximar-se, alertar),
 descritas em uma lista JSON. Essa organização prepara o sistema para, futuramente,
 receber comandos em linguagem natural traduzidos por um modelo de linguagem, mas
 já é plenamente funcional recebendo a lista de ações diretamente. A arquitetura é
@@ -886,123 +807,85 @@ ilustrada na Figura~\ref{fig:pipeline_yolo}.
 \end{tikzpicture}
 }
 \caption{Arquitetura do modo de tarefas: percepção por YOLO, leitura do LiDAR e
-odometria alimentam o \texttt{task\_executor}, que aciona as primitivas de
+odometria alimentam o \texttt{task\_executor}, que aciona as ações básicas de
 movimento em \texttt{robot\_primitives}.}
 \label{fig:pipeline_yolo}
 \end{figure}
 
-\subsubsection{Nó — \texttt{yolo\_detector}}
+O modo de tarefas emprega dois nós de software principais (o \texttt{yolo\_detector}
+e o \texttt{task\_executor}), resumidos na Tabela~\ref{tab:nos_modo2}, além de uma
+biblioteca de ações e do reaproveitamento do \texttt{lidar\_reader} do Modo 1.
 
-\textbf{Função:} detectar objetos de uma classe-alvo na imagem da câmera e
-calcular o ângulo horizontal do objeto em relação ao centro da imagem.
-
-\textbf{Subscreve:} \texttt{/camera/rgb/image\_raw} (\texttt{sensor\_msgs/Image})
-
-\textbf{Publica:}
-\begin{itemize}
-  \item \texttt{/yolo/detection} — vetor \texttt{[found, cx\_norm, cy\_norm, area, angle\_deg]}, no mesmo formato de \texttt{/target/detection} do Modo 1
-  \item \texttt{/yolo/class} — \texttt{String} com a classe detectada
-  \item \texttt{/yolo/image\_debug} — imagem anotada com a \textit{bounding box}
-\end{itemize}
-
-\textbf{Método:} a rede YOLOv3-tiny é carregada em formato \textit{darknet} com a
-função \texttt{readNetFromDarknet} (módulo \texttt{cv2.dnn}). Cada quadro é
-convertido em um \textit{blob}
-$416 \times 416$ e submetido à rede; as saídas passam por filtragem por limiar de
-confiança e por supressão não-máxima (NMS) para eliminar detecções redundantes.
-A detecção de maior confiança da classe-alvo é convertida em ângulo pela mesma
-relação geométrica do Modo 1, aproveitando o campo de visão da câmera. Como a
-saída segue o formato do \texttt{color\_detector}, o \texttt{lidar\_reader} pode
-ser reutilizado sem alteração de código — apenas com o remapeamento de
+O \texttt{yolo\_detector} detecta objetos de uma classe-alvo na imagem e calcula o
+ângulo horizontal do objeto em relação ao centro. A rede YOLOv3-tiny é carregada em
+formato \textit{darknet} (função \texttt{readNetFromDarknet}, do módulo
+\texttt{cv2.dnn}); cada quadro é convertido em um \textit{blob} $416 \times 416$
+submetido à rede, e as saídas passam por um limiar de confiança e pela supressão
+não-máxima. Como a saída segue o mesmo formato do \texttt{color\_detector}, o
+\texttt{lidar\_reader} é reutilizado sem alteração de código, apenas remapeando
 \texttt{/target/detection} para \texttt{/yolo/detection}.
+
+O \texttt{task\_executor} mantém o estado dos sensores atualizado e executa, em
+sequência, a lista de ações recebida em \texttt{/task/actions} (no formato JSON).
+Ele valida o JSON, itera sobre cada ação chamando a função correspondente e publica
+o status em \texttt{/task/status} a cada etapa. A partir do \texttt{/scan} bruto, o
+nó calcula continuamente a distância mínima no setor frontal de $\pm 30°$, valor
+usado pelo freio de segurança e pelos campos potenciais.
+
+A execução das ações é feita pela \texttt{robot\_primitives}, que não é um nó, mas
+uma biblioteca de ações básicas importada pelo executor; cada ação é uma função
+bloqueante que só retorna quando termina ou o tempo-limite se esgota. A
+Tabela~\ref{tab:acoes} lista as ações disponíveis.
 
 \begin{table}[H]
 \centering
-\caption{Parâmetros de configuração do detector YOLO.}
-\label{tab:params_yolo}
-\begin{tabular}{lp{9cm}}
+\footnotesize
+\caption{Nós do modo de tarefas e suas funções.}
+\label{tab:nos_modo2}
+\begin{tabular}{@{}l p{3.1cm} p{3.7cm} p{3.2cm}@{}}
 \hline
-\textbf{Parâmetro (Unidade)} & \textbf{Descrição detalhada} \\ \hline
-Classe Alvo & Categoria do dataset COCO a ser monitorada (ex.: \textit{sports ball}, \textit{person}, \textit{laptop}). \\
-Limiar de Confiança & Confiança mínima para aceitar uma detecção; filtra predições fracas. \\
-Limiar de NMS & Limiar de IoU usado na supressão não-máxima para descartar caixas sobrepostas. \\
-HFOV da Câmera (graus) & Campo de visão horizontal, usado para converter a posição do objeto em ângulo. \\ \hline
+\textbf{Nó} & \textbf{Função} & \textbf{Assina} & \textbf{Publica} \\ \hline
+\texttt{yolo\_detector} & Detecta objetos por categoria e calcula o ângulo & \texttt{/camera/rgb/image\_raw} & \texttt{/yolo/detection}, \texttt{/yolo/class} \\[2pt]
+\texttt{task\_executor} & Executa a lista de ações e controla o robô & \texttt{/yolo/*}, \texttt{/lidar/distance\_at\_angle}, \texttt{/scan}, \texttt{/odom}, \texttt{/task/actions} & \texttt{/cmd\_vel}, \texttt{/task/status} \\ \hline
 \end{tabular}
 \end{table}
 
-\subsubsection{Nó — \texttt{task\_executor}}
-
-\textbf{Função:} manter o estado dos sensores atualizado e executar, em sequência,
-a lista de ações recebida.
-
-\textbf{Subscreve:}
-\begin{itemize}
-  \item \texttt{/yolo/detection} e \texttt{/yolo/class} — percepção visual
-  \item \texttt{/lidar/distance\_at\_angle} — distância ao alvo detectado
-  \item \texttt{/scan} (\texttt{sensor\_msgs/LaserScan}) — LiDAR bruto, para o freio de segurança
-  \item \texttt{/odom} (\texttt{nav\_msgs/Odometry}) — odometria das rodas
-  \item \texttt{/task/actions} (\texttt{String} com JSON) — lista de ações a executar
-\end{itemize}
-
-\textbf{Publica:} \texttt{/cmd\_vel}, \texttt{/task/status} (estado atual: \texttt{IDLE},
-\texttt{RUNNING: <ação>}, \texttt{ERROR: ...}) e \texttt{/task/alert}.
-
-\textbf{Método:} os \textit{callbacks} dos sensores mantêm um objeto de estado
-(\texttt{RobotState}) sempre atualizado. Ao receber uma lista de ações, o executor
-valida o JSON e itera sobre cada ação, chamando a primitiva correspondente da
-biblioteca \texttt{robot\_primitives} e publicando o status a cada etapa. Uma ação
-especial \texttt{cancel} interrompe a sequência. A partir do \texttt{/scan} bruto,
-o nó calcula continuamente a distância mínima no setor frontal de
-$\pm 30°$, valor central para o freio de segurança e para os campos potenciais.
-
-\subsubsection{Biblioteca \texttt{robot\_primitives}}
-
-Diferentemente dos nós anteriores, \texttt{robot\_primitives} não é um nó ROS, mas
-uma biblioteca importada pelo \texttt{task\_executor}. Cada primitiva é uma função
-bloqueante que só retorna quando a ação termina ou o \textit{timeout} estoura. A
-Tabela~\ref{tab:primitivas} resume as ações disponíveis.
-
 \begin{table}[H]
 \centering
-\caption{Ações primitivas disponíveis no modo de tarefas.}
-\label{tab:primitivas}
+\caption{Ações básicas disponíveis no modo de tarefas.}
+\label{tab:acoes}
 \begin{tabular}{lp{8.5cm}}
 \hline
 \textbf{Ação} & \textbf{Descrição} \\ \hline
 \texttt{go\_forward} & Avança uma distância dada; usa odometria se disponível e para se o freio de segurança disparar. \\
 \texttt{rotate} & Gira um ângulo dado (positivo = esquerda); acumula ângulo via odometria para suportar rotações maiores que 360°. \\
 \texttt{scan\_area} & Rotação de 360° para varrer o ambiente. \\
-\texttt{search\_object} & Gira lentamente até encontrar a classe-alvo via YOLO ou atingir o \textit{timeout}. \\
+\texttt{search\_object} & Gira lentamente até encontrar a classe-alvo via YOLO ou atingir o tempo-limite. \\
 \texttt{approach\_object} & Aproxima-se do objeto com controle proporcional no ângulo e campos potenciais na velocidade linear. \\
 \texttt{stop} & Interrompe o movimento imediatamente. \\
 \texttt{alert} & Registra uma mensagem e a publica em \texttt{/task/alert}. \\ \hline
 \end{tabular}
 \end{table}
 
-\subsubsection{Freio de Segurança}
-
-O freio de segurança está ativo nas primitivas \texttt{go\_forward} e
-\texttt{approach\_object}. A cada iteração do laço de controle, verifica-se a
-distância mínima frontal medida pelo LiDAR; se ela cair abaixo de um limiar de
-segurança $d_{\text{seg}}$, o robô é imediatamente parado e a ação é abortada:
+O freio de segurança está ativo nas ações \texttt{go\_forward} e
+\texttt{approach\_object}: a cada iteração do laço de controle, se a distância
+mínima frontal medida pelo LiDAR cair abaixo de um limiar $d_{\text{seg}}$
+(adotado como $0{,}20$~m), o robô é parado imediatamente e a ação é abortada:
 
 \begin{equation}
   \label{eq:freio}
   d_{\text{frontal}} < d_{\text{seg}} \;\Rightarrow\; v = 0 .
 \end{equation}
 
-Neste projeto adotou-se $d_{\text{seg}} = 0{,}20$~m. O mecanismo é independente da
-percepção visual, funcionando como uma camada de proteção mesmo que o YOLO falhe
-em detectar um obstáculo.
+Esse mecanismo é independente da percepção visual, protegendo o robô mesmo que o
+YOLO não detecte o obstáculo.
 
-\subsubsection{Campos Potenciais na Aproximação}
-
-A primitiva \texttt{approach\_object} aplica a formulação de campos potenciais
-apresentada na Seção~\ref{sec:campos} para regular a velocidade linear. A força
-atrativa é proporcional ao erro entre a distância medida pelo LiDAR e a distância
-desejada, e a força repulsiva atua quando um obstáculo entra no raio de
-influência $d_0$. A velocidade angular, por sua vez, segue um controle
-proporcional ao erro angular fornecido pelo YOLO ($e_\theta = c_{x,\text{norm}}$):
+Na ação \texttt{approach\_object}, a velocidade linear é regulada pelos campos
+potenciais apresentados na Seção~\ref{sec:campos} (força atrativa proporcional ao
+erro entre a distância medida e a desejada, e força repulsiva quando um obstáculo
+entra no raio de influência $d_0$), enquanto a velocidade angular segue um
+controle proporcional ao erro angular fornecido pelo YOLO
+($e_\theta = c_{x,\text{norm}}$):
 
 \begin{equation}
   \label{eq:aproximacao}
@@ -1013,39 +896,20 @@ proporcional ao erro angular fornecido pelo YOLO ($e_\theta = c_{x,\text{norm}}$
   \end{aligned}
 \end{equation}
 
-Ambas as velocidades são saturadas por limites máximos de segurança. A
-Tabela~\ref{tab:params_approach} lista os valores adotados.
+Ambas as velocidades são saturadas por limites máximos de segurança.
 
-\begin{table}[H]
-\centering
-\caption{Parâmetros da aproximação por campos potenciais.}
-\label{tab:params_approach}
-\begin{tabular}{llp{6.5cm}}
-\hline
-\textbf{Parâmetro} & \textbf{Valor} & \textbf{Descrição} \\ \hline
-$k_{p}$ (ganho atrativo)        & 0,40 & Intensidade da força de atração ao alvo. \\
-$k_{R}$ (ganho repulsivo)       & 0,15 & Intensidade da força de repulsão de obstáculos. \\
-$d_0$ (raio de influência)      & 0,50~m & Distância a partir da qual a repulsão passa a atuar. \\
-$d_{\text{seg}}$ (freio)        & 0,20~m & Distância mínima frontal antes da parada de emergência. \\
-$k_{p,\omega}$ (ganho angular)  & 0,60 & Ganho do controle proporcional de rotação. \\ \hline
-\end{tabular}
-\end{table}
-
-\subsubsection{Odometria}
-
-As primitivas \texttt{go\_forward} e \texttt{rotate} utilizam o tópico
-\texttt{/odom} para medir deslocamento e rotação reais a partir dos
-\textit{encoders} das rodas. O ângulo de guinada (\textit{yaw}) é extraído
-diretamente do quatérnion de orientação, sem dependência da biblioteca \textit{tf}:
+As ações \texttt{go\_forward} e \texttt{rotate}, por sua vez, usam o tópico
+\texttt{/odom} para medir deslocamento e rotação reais a partir dos encoders das
+rodas; o ângulo de guinada (\textit{yaw}) é extraído diretamente do quatérnion de
+orientação, sem depender da biblioteca de transformadas (\texttt{tf}):
 
 \begin{equation}
   \label{eq:yaw}
   \psi = \operatorname{atan2}\!\big(2(q_w q_z + q_x q_y),\; 1 - 2(q_y^2 + q_z^2)\big) .
 \end{equation}
 
-Quando a odometria não está disponível (tópico silencioso), as primitivas
-retornam automaticamente à estimativa por tempo, sem necessidade de configuração
-manual, garantindo robustez do sistema.
+Quando a odometria não está disponível, as ações caem automaticamente para uma
+estimativa por tempo, sem necessidade de configuração manual.
 
 
 % ══════════════════════════════════════════════════════════════
@@ -1087,7 +951,7 @@ em conjunto:
 
 A câmera e o LiDAR concordam no ângulo ($12{,}8°$) e o LiDAR fornece a
 distância métrica ($3{,}04$ m). O erro de distância de $2{,}07$ m indica que o
-alvo estava a $\approx 3$ m enquanto a distância desejada é $1$ m —
+alvo estava a $\approx 3$ m enquanto a distância desejada é $1$ m,
 comportamento correto e esperado.
 
 \subsubsection{Seguimento Autônomo}
@@ -1100,55 +964,421 @@ ao perder o alvo de vista, o robô gira lentamente no último sentido detectado
 até reencontrá-lo ou atingir o timeout de 4 segundos.
 
 % --------------------------------------------------------------
-\subsection{Detecção por YOLO}
+\subsection{Experimentos do Modo de Tarefas}
 % --------------------------------------------------------------
 
-A detecção de objetos por categoria foi validada com o nó \texttt{yolo\_detector}
-executando o modelo YOLOv3-tiny a bordo do LIMO. A Figura~\ref{fig:yolo_laptop}
-mostra o sistema em operação, detectando corretamente um \textit{laptop}: a
-\textit{bounding box} verde delimita o objeto, o ponto vermelho marca seu centro e
-o rótulo exibe a classe, a confiança da detecção ($46\%$) e o ângulo horizontal
-estimado em relação ao centro da imagem ($3{,}3°$), próximo de zero por o objeto
-estar quase centralizado.
+Para validar o Modo 2 em \textit{hardware} real, foram realizados experimentos de
+aproximação a objetos detectados pelo YOLO. Em cada tarefa, o nó
+\texttt{task\_logger} registrou os dados dos sensores em um arquivo CSV,
+posteriormente processado pela ferramenta \texttt{plot\_task.py}, que gera os
+gráficos temporais e as métricas de desempenho apresentados a seguir. A distância
+real entre o robô e o objeto foi medida com trena, servindo de referência
+(\textit{ground truth}) para os valores estimados pelos sensores.
+
+Para cada experimento são gerados os mesmos seis gráficos, descritos a seguir.
+Essa padronização permite comparar os experimentos entre si:
+
+\begin{itemize}
+  \item Distância ao alvo: distância robô--objeto, medida pelo LiDAR na
+  direção do ângulo fornecido pelo YOLO, com a linha da distância-alvo. Evidencia
+  a convergência.
+  \item Distância mínima frontal: menor distância a um obstáculo no setor
+  frontal ($\pm30°$), com as linhas do freio de segurança ($0{,}20$~m) e da zona
+  de influência repulsiva ($0{,}50$~m).
+  \item Campos potenciais: forças atrativa e repulsiva e sua resultante,
+  que corresponde à velocidade linear de comando.
+  \item Comandos \texttt{/cmd\_vel}: velocidades linear e angular
+  enviadas ao robô.
+  \item Ângulo do alvo (YOLO): desvio angular do objeto em relação ao
+  centro da imagem; tende a zero quando o alvo é centralizado.
+  \item Trajetória (odometria): caminho do robô no plano, com a posição
+  estimada do objeto (estrela) e a circunferência da distância-alvo ao seu redor.
+  Note-se que rotações no lugar (como na busca) quase não alteram a posição
+  $(x,y)$ e, portanto, aparecem pouco neste gráfico.
+\end{itemize}
+
+Em todos os gráficos temporais, linhas verticais tracejadas marcam o início de
+cada ação da tarefa.
+
+Uma característica observada em todos os experimentos é que a distância ao alvo
+(medida pelo LiDAR na direção do ângulo fornecido pelo YOLO) apresenta
+oscilações de curta duração. Isso ocorre porque o ângulo estimado pela rede possui
+pequenas variações (\textit{jitter}) entre quadros, fazendo com que o feixe do
+LiDAR ocasionalmente incida sobre o fundo da cena em vez do objeto. Apesar dessas
+oscilações, a tendência de convergência do sistema permanece sempre clara.
+
+\subsubsection{Experimento 1 — Aproximação a um Objeto}
+
+Neste experimento, uma mochila (classe \texttt{backpack}) foi posicionada a
+aproximadamente $2$~m à frente do robô, com o caminho livre de obstáculos, e a
+distância-alvo configurada em $0{,}50$~m, conforme a montagem da
+Figura~\ref{fig:exp1_setup}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{images/tg2/laptop_yolo.png}
-  \caption{Detecção de um \textit{laptop} pelo YOLOv3-tiny: \textit{bounding box},
-  centro do objeto, classe, confiança e ângulo calculado exibidos em tempo real.}
-  \label{fig:yolo_laptop}
+  \includegraphics[width=0.5\textwidth]{images/fotos_tiradas/exp1_limo_fix.jpg}
+  \caption{Montagem do Experimento 1: o LIMO e a mochila (alvo) posicionados a
+  cerca de $2$~m de distância, com o caminho livre.}
+  \label{fig:exp1_setup}
 \end{figure}
 
-Observou-se que a qualidade das detecções é sensível às condições de iluminação
-do ambiente: em cenas com pouca luz, a confiança das predições cai e algumas
-classes tornam-se mais difíceis de detectar de forma estável. Esse comportamento
-é coerente com o uso da variante \textit{tiny} da rede, que troca parte da
-precisão por velocidade de inferência para viabilizar a execução na Jetson Nano.
+A Figura~\ref{fig:exp1_distancia} apresenta a evolução da distância ao alvo ao
+longo do tempo.
 
-% --------------------------------------------------------------
-\subsection{Aproximação com Campos Potenciais}
-% --------------------------------------------------------------
-% TODO: escrever (depende de teste no robô). Incluir os gráficos gerados pelo
-% plot_task.py a partir do CSV do task_logger: distância ao alvo, LiDAR mínimo
-% frontal, forças atrativa/repulsiva, cmd_vel, ângulo YOLO e trajetória XY.
-\textit{[Seção a ser escrita.]}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp1_distancia.png}
+  \caption{Experimento 1 — distância do robô ao alvo ao longo do tempo. A curva
+  parte de $3{,}67$~m e converge para a distância-alvo de $0{,}50$~m (linha
+  tracejada verde), estabilizando em $0{,}52$~m aos $9{,}9$~s.}
+  \label{fig:exp1_distancia}
+\end{figure}
+
+O robô reduziu a distância ao alvo de forma quase monotônica
+(descontadas as oscilações de curta duração já mencionadas) até estabilizar na
+distância desejada, com erro final da ordem de poucos centímetros. A medição com
+trena confirmou a distância final estimada pela fusão câmera--LiDAR. Este resultado
+demonstra a convergência do controlador de aproximação em condição nominal, sem
+obstáculos.
+
+O mesmo comportamento pode ser acompanhado pelas demais grandezas registradas. A
+Figura~\ref{fig:exp1_angulo} mostra o ângulo do alvo estimado pelo YOLO: partindo
+de um desvio angular inicial, o controlador proporcional de rotação o reduz,
+mantendo o alvo próximo ao centro do campo de visão durante toda a aproximação.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp1_angulo.png}
+  \caption{Experimento 1 — ângulo do alvo estimado pelo YOLO. O desvio angular
+  parte de $14°$ e é reduzido pelo controlador, mantendo o alvo próximo ao centro
+  ($0°$).}
+  \label{fig:exp1_angulo}
+\end{figure}
+
+A Figura~\ref{fig:exp1_cmdvel} apresenta os comandos de velocidade enviados ao
+robô. A velocidade angular atua principalmente nos instantes iniciais, corrigindo
+o alinhamento, enquanto a velocidade linear impulsiona o avanço e decresce à
+medida que o alvo é alcançado, comportamento esperado de um controlador
+proporcional.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp1_cmdvel.png}
+  \caption{Experimento 1 — comandos de velocidade linear e angular enviados ao
+  robô no tópico \texttt{/cmd\_vel}.}
+  \label{fig:exp1_cmdvel}
+\end{figure}
+
+A trajetória percorrida, reconstruída a partir da odometria, é mostrada na
+Figura~\ref{fig:exp1_trajetoria}. O robô parte da posição inicial (círculo verde)
+e desloca-se em direção ao objeto (estrela), detendo-se sobre a circunferência
+tracejada que representa a distância-alvo de $0{,}50$~m ao redor do alvo.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.62\textwidth]{images/tg2/exp1_trajetoria.png}
+  \caption{Experimento 1 — trajetória do robô reconstruída pela odometria, da
+  posição inicial (verde) até a final (vermelho). A estrela indica a posição
+  estimada do objeto e a circunferência tracejada, a distância-alvo de $0{,}50$~m.}
+  \label{fig:exp1_trajetoria}
+\end{figure}
+
+As Figuras~\ref{fig:exp1_forcas} e~\ref{fig:exp1_lidar} referem-se aos campos
+potenciais e à distância mínima frontal. Como este experimento não possui
+obstáculos no caminho, a força repulsiva permanece nula durante toda a execução, e
+a velocidade linear resulta apenas da componente atrativa, que decai à medida que
+o erro de distância diminui. A distância mínima frontal medida pelo LiDAR permanece
+sempre acima da zona de influência repulsiva e do limite do freio de segurança,
+aproximando-se da distância-alvo apenas ao final, quando o próprio alvo passa a ser
+o objeto mais próximo à frente do robô. Esses dois mecanismos (repulsão e freio)
+são efetivamente exercitados no Experimento~2.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp1_forcas.png}
+  \caption{Experimento 1 — forças dos campos potenciais. Sem obstáculos, a força
+  repulsiva é nula e a resultante (velocidade linear) coincide com a força
+  atrativa, que decai com a aproximação.}
+  \label{fig:exp1_forcas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp1_lidar.png}
+  \caption{Experimento 1 — distância mínima frontal medida pelo LiDAR. Permanece
+  acima das zonas de influência repulsiva e de freio durante toda a aproximação.}
+  \label{fig:exp1_lidar}
+\end{figure}
+
+\subsubsection{Experimento 2 — Desvio de Obstáculo por Campos Potenciais}
+
+Neste experimento avaliou-se o comportamento do robô diante de um obstáculo
+introduzido dinamicamente. A mochila foi novamente o alvo, com distância-alvo de
+$0{,}50$~m; durante a aproximação, uma caixa foi colocada no caminho, entre o robô
+e o alvo, e posteriormente retirada. O obstáculo é percebido pelo LiDAR (setor
+frontal de $\pm30°$), independentemente do YOLO. A Figura~\ref{fig:exp2_setup}
+mostra a caixa posicionada no caminho.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/fotos_tiradas/exp2_limo_fix.jpg}
+  \caption{Montagem do Experimento 2: a caixa (obstáculo) posicionada à frente do
+  LIMO, entre ele e o alvo.}
+  \label{fig:exp2_setup}
+\end{figure}
+
+A execução pode ser dividida em três fases, claramente identificáveis nos
+gráficos. A Figura~\ref{fig:exp2b_forcas}, que mostra as forças dos campos
+potenciais, resume bem essa dinâmica:
+
+\begin{itemize}
+  \item Fase 1 (aproximação livre): a força atrativa domina, a repulsiva é nula e
+  a resultante (velocidade linear) é positiva; o robô avança em direção ao alvo.
+  \item Fase 2 (obstáculo presente): ao entrar na zona de influência, a força
+  repulsiva sobe até equilibrar a atrativa, e a resultante cai a zero. O robô fica
+  parado, "preso" pelo campo repulsivo, a alguma distância do alvo, com a caixa
+  logo à sua frente.
+  \item Fase 3 (obstáculo retirado): a força repulsiva volta a zero, a resultante
+  torna a crescer e o robô retoma o avanço até alcançar o alvo.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp2b_forcas.png}
+  \caption{Experimento 2 — forças dos campos potenciais. A força repulsiva sobe e
+  equilibra a atrativa enquanto a caixa está presente (resultante $\approx 0$,
+  robô parado) e retorna a zero quando a caixa é retirada, liberando o avanço.}
+  \label{fig:exp2b_forcas}
+\end{figure}
+
+O efeito dessas três fases sobre a distância ao alvo é mostrado na
+Figura~\ref{fig:exp2b_distancia}. A distância cai durante a aproximação inicial,
+permanece estagnada durante o período em que o robô está preso pelo obstáculo, e
+volta a decair após a retirada da caixa, estabilizando na distância desejada.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp2b_distancia.png}
+  \caption{Experimento 2 — distância ao alvo. Observa-se o platô em torno de
+  $0{,}9$~m (robô preso pelo obstáculo) e a retomada da convergência após a
+  retirada da caixa, estabilizando em $0{,}55$~m.}
+  \label{fig:exp2b_distancia}
+\end{figure}
+
+A presença e a remoção do obstáculo são confirmadas pela distância mínima frontal
+medida pelo LiDAR (Figura~\ref{fig:exp2b_lidar}): o valor cai para dentro da zona
+de influência repulsiva, mas ainda acima do limite do freio de segurança, e
+permanece nesse patamar enquanto a caixa está presente, saltando de volta para
+valores altos quando ela é retirada.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp2b_lidar.png}
+  \caption{Experimento 2 — distância mínima frontal. Cai à zona de influência
+  repulsiva ($\approx 0{,}30$~m) com a caixa presente e retorna a valores altos
+  após sua retirada.}
+  \label{fig:exp2b_lidar}
+\end{figure}
+
+Os comandos de velocidade (Figura~\ref{fig:exp2b_cmdvel}) refletem esse
+comportamento: velocidade linear positiva na fase inicial, praticamente nula durante o bloqueio e
+novamente positiva após a liberação. A trajetória reconstruída pela odometria
+(Figura~\ref{fig:exp2b_trajetoria}) confirma o deslocamento até a vizinhança do
+alvo, e o ângulo do alvo (Figura~\ref{fig:exp2b_angulo}) manteve-se próximo ao
+centro durante toda a execução.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp2b_cmdvel.png}
+  \caption{Experimento 2 — comandos de velocidade. A velocidade linear anula-se no
+  período em que o robô está preso pelo obstáculo e é retomada após a retirada da
+  caixa.}
+  \label{fig:exp2b_cmdvel}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.62\textwidth]{images/tg2/exp2b_trajetoria.png}
+  \caption{Experimento 2 — trajetória reconstruída pela odometria, da posição
+  inicial (verde) até a final (vermelho), próxima à distância-alvo do objeto
+  (estrela).}
+  \label{fig:exp2b_trajetoria}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp2b_angulo.png}
+  \caption{Experimento 2 — ângulo do alvo estimado pelo YOLO, mantido próximo ao
+  centro durante toda a aproximação.}
+  \label{fig:exp2b_angulo}
+\end{figure}
+
+Este experimento valida o uso dos campos potenciais para desvio reativo de
+obstáculos: a força repulsiva impediu a colisão, mantendo o robô a uma distância
+segura enquanto o obstáculo esteve presente, e o sistema recuperou-se
+automaticamente, retomando a tarefa assim que o caminho foi liberado, sem
+qualquer intervenção externa.
+
+\subsubsection{Experimento 3 — Busca e Aproximação}
+
+Este experimento avalia a sequência completa de busca e aproximação. A
+mochila foi posicionada fora do campo de visão inicial do robô, e a tarefa
+combinou duas ações em sequência: \texttt{search\_object}, que gira o robô até
+encontrar o objeto, seguida de \texttt{approach\_object} com distância-alvo de
+$0{,}75$~m. Como mostra a Figura~\ref{fig:exp3_setup}, o robô iniciou de costas
+para o alvo (a cerca de $180°$), o que exige a busca antes da aproximação.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/fotos_tiradas/exp3_limo_fix.jpg}
+  \caption{Montagem do Experimento 3: o LIMO posicionado de costas para o alvo
+  (aproximadamente $180°$), exigindo a busca antes da aproximação.}
+  \label{fig:exp3_setup}
+\end{figure}
+
+A dinâmica das duas fases é mais bem observada nos comandos de velocidade
+(Figura~\ref{fig:exp3_cmdvel}). Durante a busca, o robô aplica velocidade angular
+constante com velocidade linear nula, girando no próprio eixo; ao encontrar o alvo,
+a ação \texttt{approach\_object} assume e a velocidade linear passa a impulsionar o
+avanço, decaindo à medida que o alvo é alcançado. As linhas verticais tracejadas
+marcam a transição entre as ações.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp3_cmdvel.png}
+  \caption{Experimento 3 — comandos de velocidade. Na busca, apenas a velocidade
+  angular é aplicada (giro no lugar); após a aquisição do alvo, a velocidade linear
+  conduz a aproximação.}
+  \label{fig:exp3_cmdvel}
+\end{figure}
+
+A fase de aproximação é detalhada na Figura~\ref{fig:exp3_distancia}: a distância
+ao alvo, medida de forma consistente somente após a aquisição, decai até
+estabilizar na distância desejada, com erro final de poucos centímetros. O ângulo
+do alvo (Figura~\ref{fig:exp3_angulo}) evidencia o instante da aquisição: após
+encontrar o objeto, com um desvio inicial considerável, o controlador o traz
+rapidamente para próximo do centro.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp3_distancia.png}
+  \caption{Experimento 3 — distância ao alvo durante a fase de aproximação,
+  convergindo de $2{,}58$~m para $0{,}79$~m (alvo de $0{,}75$~m).}
+  \label{fig:exp3_distancia}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp3_angulo.png}
+  \caption{Experimento 3 — ângulo do alvo (YOLO). Após a aquisição, o desvio de
+  $\approx -23°$ é corrigido para próximo do centro.}
+  \label{fig:exp3_angulo}
+\end{figure}
+
+As demais grandezas complementam a análise. A trajetória
+(Figura~\ref{fig:exp3_trajetoria}) reflete a observação feita na abertura desta
+seção: como a busca é uma rotação no lugar, ela quase não aparece no deslocamento
+$(x,y)$; apenas a fase de aproximação produz translação visível, encerrando nas
+proximidades da distância-alvo do objeto. Os campos potenciais
+(Figura~\ref{fig:exp3_forcas}) apresentam apenas a componente atrativa, pois não há
+obstáculos, e a distância mínima frontal (Figura~\ref{fig:exp3_lidar}) permanece
+elevada durante toda a aproximação.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.62\textwidth]{images/tg2/exp3_trajetoria.png}
+  \caption{Experimento 3 — trajetória pela odometria. A rotação da busca não
+  produz deslocamento em $(x,y)$; apenas a aproximação (translação) é visível, da
+  posição inicial (verde) à final (vermelho).}
+  \label{fig:exp3_trajetoria}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp3_forcas.png}
+  \caption{Experimento 3 — forças dos campos potenciais durante a aproximação.
+  Sem obstáculos, atua apenas a força atrativa.}
+  \label{fig:exp3_forcas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{images/tg2/exp3_lidar.png}
+  \caption{Experimento 3 — distância mínima frontal. Mantém-se elevada durante a
+  aproximação; a leitura pontual próxima de $0{,}11$~m corresponde a ruído do
+  LiDAR, e não a um obstáculo real.}
+  \label{fig:exp3_lidar}
+\end{figure}
+
+Este experimento demonstra a capacidade do sistema de localizar
+autonomamente um objeto fora do campo de visão inicial e, em seguida,
+aproximar-se dele com a mesma precisão dos demais casos.
 
 
 % ══════════════════════════════════════════════════════════════
 \newpage
 \section{Conclusão}
 % ══════════════════════════════════════════════════════════════
-% TODO: reescrever como conclusão final (hoje é conclusão parcial).
-% Retomar: os dois modos implementados e validados em hardware real; o que a
-% fusão sensorial e os campos potenciais agregaram; limitações observadas
-% (iluminação, LiDAR sem visão traseira); e perspectivas futuras.
-\textit{[Seção a ser escrita.]}
+Este trabalho apresentou o desenvolvimento e a validação, em hardware real, de um
+sistema de seguimento autônomo de alvos na plataforma AgileX LIMO, utilizando o
+arcabouço ROS. Foram implementados dois modos de operação complementares: um
+seguidor por cor, no qual a fusão sensorial entre câmera e LiDAR alimenta um
+controlador proporcional; e um modo de tarefas, no qual a rede YOLO detecta
+objetos por categoria e uma biblioteca de ações executa comportamentos como busca,
+aproximação e alerta, contando com freio de segurança e aproximação por campos
+potenciais.
 
-% ----- Conteúdo da versão parcial preservado abaixo (comentado) -----
-% O sistema de seguimento de alvo visual com fusão de sensores foi implementado e
-% validado em hardware real. Os quatro nós do pipeline operam de forma integrada,
-% com comunicação via tópicos ROS, parâmetros configuráveis externamente e
-% comportamentos de segurança implementados.
-%
-% \subsection{Cronograma}
-% (lista de próximos passos da versão parcial — não se aplica ao relatório final)
+Os experimentos realizados no robô confirmaram o funcionamento do sistema. No modo
+de tarefas, a aproximação convergiu para a distância desejada com erros de poucos
+centímetros, verificados por trena; os campos potenciais promoveram o desvio de
+obstáculos, com o robô parando diante de um obstáculo e retomando a tarefa
+automaticamente quando o caminho era liberado; e a combinação de busca e
+aproximação permitiu localizar e alcançar um objeto inicialmente fora do campo de
+visão.
+
+Também foram observadas limitações relevantes. A câmera embarcada, de posição baixa
+e resolução modesta, tornou a detecção sensível às condições de iluminação, o que
+motivou o uso da variante YOLOv3-tiny, mais leve porém menos precisa, adequada ao
+hardware embarcado (Jetson Nano). A medição de distância pelo LiDAR na direção do
+ângulo estimado pela câmera apresentou oscilações, e a estratégia de campos
+potenciais, por sua natureza reativa, é suscetível a mínimos locais, nos quais o
+robô estaciona diante do obstáculo em vez de contorná-lo. Além disso, o campo de
+visão estreito dificulta a manutenção da detecção quando o alvo está muito próximo.
+
+De modo geral, o trabalho evidenciou o valor de uma arquitetura modular em ROS, na
+qual cada etapa do processamento é um nó independente e reaproveitável, e demonstrou
+a viabilidade de combinar uma técnica clássica de navegação reativa (campos
+potenciais) com um método moderno de percepção (YOLO) em uma plataforma de baixo
+custo. A biblioteca de ações desenvolvida constitui, ainda, uma base preparada para
+a interface em linguagem natural descrita a seguir.
+
+\subsection{Trabalhos Futuros}
+
+A principal extensão prevista é a interface em linguagem natural. A biblioteca de
+ações foi concebida justamente para ser acionada por um modelo de linguagem (LLM),
+que traduziria um comando coloquial em uma sequência de ações. Por exemplo, o
+pedido ``ache minha mochila, vá até ela e me avise'' seria convertido na
+sequência \texttt{search\_object}, \texttt{approach\_object} e \texttt{alert}. Isso
+tornaria o robô utilizável por pessoas sem conhecimento técnico, dispensando a
+composição manual da lista de ações em JSON.
+
+No campo da percepção, o YOLOv3-tiny poderia ser substituído por um modelo mais
+recente e preciso, como o YOLOv8, mais robusto a variações de iluminação. Essa
+substituição, contudo, esbarra na capacidade do hardware embarcado do LIMO. Uma
+alternativa é aproveitar a natureza distribuída do ROS: executar a percepção (e
+eventualmente a própria LLM) em um computador mais potente conectado à mesma rede,
+enviando ao robô apenas o resultado (as detecções e os comandos), mantendo o
+processamento pesado fora da plataforma embarcada.
+
+A estratégia de campos potenciais também pode ser aprimorada. Na implementação
+atual, a força repulsiva atua apenas sobre a velocidade linear, fazendo o robô
+parar diante do obstáculo. A adição de uma componente repulsiva à velocidade
+angular permitiria que o robô se desviasse lateralmente e contornasse o obstáculo,
+mitigando o problema do mínimo local observado nos experimentos.
+
+Por fim, o YOLO permite o ajuste fino (\textit{fine-tuning}) da rede para objetos
+específicos, além das classes genéricas do dataset COCO. Seria possível treiná-lo
+para reconhecer um objeto de interesse particular. Por exemplo, em um ambiente de
+logística, uma peça ou caixa de um modelo específico a ser recolhida pelo robô; ou,
+em um cenário de assistência, um item pessoal do usuário. Isso ampliaria a
+aplicabilidade do sistema a tarefas mais concretas e personalizadas.
